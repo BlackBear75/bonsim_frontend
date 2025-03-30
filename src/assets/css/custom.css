@@ -1,0 +1,30 @@
+.nav-item a {
+  text-decoration: none;
+}
+
+.nav-item a.active {
+  text-decoration: none;
+}
+.logo-img
+{
+  width: 240px;
+  height: 120px;
+}
+.custom_collapse {
+  display: block;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease-out;
+}
+
+.custom_collapse.show {
+  max-height: 500px;
+}
+
+i.fa {
+  transition: transform 0.4s ease;
+}
+
+i.fa-chevron-circle-up {
+  transform: rotate(180deg);
+}

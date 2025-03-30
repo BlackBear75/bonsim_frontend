@@ -29,12 +29,28 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+
+              "node_modules/slick-carousel/slick/slick.css",
+              "node_modules/slick-carousel/slick/slick-theme.css",
+              "src/styles.scss",
+              "src/assets/css/custom.css",
+              "src/assets/css/templatemo.css",
+              "src/assets/css/fontawesome.css",
+              "src/assets/css/bootstrap.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/slick-carousel/slick/slick.min.js",
+              "src/assets/js/bootstrap.bundle.min.js",
+              "src/assets/js/templatemo.js",
+              "src/assets/js/templatemo.min.js",
+              "src/assets/js/custom.js"
+            ]
+
           },
           "configurations": {
             "production": {
@@ -85,11 +101,10 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
+
             "styles": [
               "src/styles.scss"
             ],
