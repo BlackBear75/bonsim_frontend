@@ -1,53 +1,139 @@
-<nav class="navbar navbar-expand-lg navbar-light shadow">
-  <div class="container d-flex justify-content-between align-items-center">
+<nav class="navbar" [class.sticky]="isNavbarSticky">
 
-    <a class="navbar-brand text-success logo h1 align-self-center" routerLink="/" routerLinkActive="active">
-      <img src="assets/img/logo.png" alt="Bonsim Logo" class="logo-img">
+  <div class="nav-container">
+    <div class="burger" (click)="toggleSidebar()">
+      <span></span>
+      <span></span>
+      <span></span>
+
+    </div>
+
+    <a routerLink="/" class="logo">
+      <img src="assets/img/logo.png" alt="Bonsim logo" />
     </a>
+  </div>
 
-    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <div class="navbar-icons">
+    <div class="icon search-icon"(click)="toggleSearch()">
+      <img src="assets/img/magnifier.png" alt="Magnifying" class="magnifying-glass-icon" />
+    </div>
 
-    <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
-      <div class="flex-fill">
-        <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
-          <li class="nav-item">
-            <a routerLink="/" routerLinkActive="active">Home</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/about" routerLinkActive="active">About</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/shop" routerLinkActive="active">Shop</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/contact" routerLinkActive="active">Contact</a>
-          </li>
-        </ul>
-      </div>
-      <div class="navbar align-self-center d-flex">
-        <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
-          <div class="input-group">
-            <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
-            <div class="input-group-text">
-              <i class="fa fa-fw fa-search"></i>
-            </div>
-          </div>
-        </div>
-        <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
-          <i class="fa fa-fw fa-search text-dark mr-2"></i>
-        </a>
-        <a class="nav-icon position-relative text-decoration-none" href="#">
-          <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-          <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
-        </a>
-        <a class="nav-icon position-relative text-decoration-none" href="#">
-          <i class="fa fa-fw fa-user text-dark mr-3"></i>
-          <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
-        </a>
-      </div>
+
+    <div class="icon bag-icon" (click)="toggleCart()">
+      <img src="assets/img/bag.png" alt="Bag" class="bag-icon" />
+      <span class="bag-badge">{{ cartItemCount }}</span>
+      <span class="bag-price">{{ cartTotalPrice | currency:'UAH':'symbol':'1.0' }}</span>
     </div>
 
   </div>
 </nav>
+  <div class="search-sidebar-backdrop" *ngIf="isSearchOpen" (click)="toggleSearch()"></div>
+  <div class="search-sidebar" [class.open]="isSearchOpen">
+    <button class="close-button" (click)="toggleSearch()">&#10005;</button>
+
+    <div class="search-container">
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (input)="onSearchInput()"
+        placeholder="Пошук товарів"
+      />
+      <p>Введіть текст товару, який шукаєте</p>
+    </div>
+  </div>
+
+  <div class="cart-sidebar-backdrop" *ngIf="isCartOpen" (click)="toggleCart()"></div>
+  <aside class="cart-sidebar" [class.open]="isCartOpen">
+    <div class="cart-sidebar-header">
+      <h2>Кошик</h2>
+      <button class="close-button" (click)="toggleCart()">×</button>
+    </div>
+
+    <div class="cart-sidebar-content">
+      <ng-container *ngIf="cartItemCount > 0; else emptyCart">
+        <p>Тут товари кошика (пізніше).</p>
+      </ng-container>
+
+      <ng-template #emptyCart>
+        <div class="empty-cart">
+          <p>Ваш кошик порожній.</p>
+          <button class="return-to-shop" (click)="goToShop()">Повернутись до магазину</button>
+        </div>
+      </ng-template>
+    </div>
+  </aside>
+
+
+
+
+  <div class="sidebar-backdrop" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
+  <aside class="sidebar" [class.open]="isSidebarOpen">
+    <!-- Таби -->
+    <div class="sidebar-tabs">
+      <button [class.active]="activeTab === 'categories'" (click)="setTab('categories')">Категорії</button>
+      <button [class.active]="activeTab === 'info'" (click)="setTab('info')">Інформація</button>
+    </div>
+
+    <ul class="sidebar-menu">
+      <ng-container *ngIf="activeTab === 'categories'">
+        <li class="has-submenu">
+          <div class="submenu-container">
+            <div class="submenu-toggle" (click)="goToCategory('men')">Чоловічий одяг</div>
+            <div class="submenu-arrow-container" (click)="toggleSubmenu('men')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   xmlns="http://www.w3.org/2000/svg"
+                   [ngClass]="{ 'rotate': isSubmenuOpen('men') }"
+                   class="submenu-arrow">
+                <path d="M7 10l5 5 5-5" stroke="black" stroke-width="2"
+                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+
+          <ul *ngIf="activeSubmenu === 'men'" class="submenu">
+            <li><a routerLink="/products/men/hoodie" (click)="closeSidebar()">Худі</a></li>
+            <li><a routerLink="/products/men/tshirt" (click)="closeSidebar()">Футболки</a></li>
+            <li><a routerLink="/products/men/pants" (click)="closeSidebar()">Штани</a></li>
+            <li><a routerLink="/products/men/shorts" (click)="closeSidebar()">Шорти</a></li>
+
+          </ul>
+        </li>
+
+        <li class="has-submenu">
+          <div class="submenu-container">
+            <div class="submenu-toggle" (click)="goToCategory('women')">Жіночий одяг</div>
+            <div  class=submenu-arrow-container (click)="toggleSubmenu('women')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   xmlns="http://www.w3.org/2000/svg"
+                   [ngClass]="{ 'rotate': isSubmenuOpen('women') }"
+                   class="submenu-arrow">
+                <path d="M7 10l5 5 5-5" stroke="black" stroke-width="2"
+                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <ul *ngIf="isSubmenuOpen('women')" class="submenu">
+            <li><a routerLink="/products/women/hoodie "(click)="closeSidebar()" >Худі</a></li>
+            <li><a routerLink="/products/women/tshirt"(click)="closeSidebar()">Футболки</a></li>
+            <li><a routerLink="/products/women/pants"(click)="closeSidebar()">Штани</a></li>
+            <li><a routerLink="/products/women/shorts"(click)="closeSidebar()">Шорти</a></li>
+          </ul>
+        </li>
+
+
+        <li><a routerLink="/discounts" (click)="closeSidebar()">Знижки</a></li>
+
+
+      </ng-container>
+
+      <!-- Інформація -->
+      <ng-container *ngIf="activeTab === 'info'">
+        <li><a routerLink="/" [class.active-link]="isActiveLink('/')" (click)="closeSidebar()">Головна</a></li>
+        <li><a routerLink="/shop" [class.active-link]="isActiveLink('/shop')" (click)="closeSidebar()">Магазин</a></li>
+        <li><a routerLink="/about" [class.active-link]="isActiveLink('/about')" (click)="closeSidebar()">Про нас</a></li>
+        <li><a routerLink="/contact" [class.active-link]="isActiveLink('/contact')" (click)="closeSidebar()">Контакти</a></li>
+      </ng-container>
+    </ul>
+  </aside>

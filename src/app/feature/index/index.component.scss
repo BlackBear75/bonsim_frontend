@@ -1,0 +1,57 @@
+.overlay-content {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 10;
+}
+
+
+.overlay-content .small-text {
+  font-size: 1.5vw !important;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+
+.custom-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  text-transform: uppercase;
+  transition: background-color 0.3s;
+}
+
+.custom-btn:hover {
+  background-color: #333;
+  color: #fff;
+}
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.social-icon {
+  font-size: 24px;
+  color: #000;
+  transition: color 0.3s;
+}
+
+.social-icon:hover {
+  color: #007bff; /* можна змінити на будь-який бажаний колір */
+}
+
+.community-title {
+  font-size: clamp(20px, 4vw, 36px);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.community-subtitle {
+  font-size: clamp(14px, 2.5vw, 20px);
+  color: #666;
+  margin-bottom: 20px;
+}
