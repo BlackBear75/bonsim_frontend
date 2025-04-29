@@ -1,0 +1,25 @@
+.profile-page {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  color: #000;
+  min-height: 70vh;
+}
+
+.profile-container {
+  display: flex;
+  width: 60%;
+  margin: 2% 20%;
+}
+
+app-profile-nav {
+  flex: 0 0 250px;
+  border-right: 1px solid #ccc;
+  padding: 0 20px ;
+}
+
+.profile-content {
+  flex: 1;
+  padding: 30px 20px 20px 20px;
+  background-color: #fff;
+}

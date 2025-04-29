@@ -27,21 +27,34 @@
     align-items: center;
     justify-content: space-between;
 
-    .burger {
-      width: 25px;
-      height: 18px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
+  .burger {
+    position: relative;
+    width: 25px;
+    height: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
 
-      span {
-        height: 3px;
-        background: #333;
-        border-radius: 2px;
-      }
+    &:before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      left: -30px;
+      right: -40px;
+      bottom: -30px;
+      background: transparent;
     }
-    .logo img {
+
+    span {
+      height: 3px;
+      background: #333;
+      border-radius: 2px;
+    }
+  }
+
+
+  .logo img {
       height: 10vh;
       width: auto;
     }
@@ -450,4 +463,10 @@
 
 .sidebar, .cart-sidebar, .search-sidebar {
   z-index: 2000;
+}
+.sidebar-icon {
+  width: 20px;  /* Розмір іконки */
+  height: 20px;
+  margin-right: 8px;  /* Відстань між іконкою та текстом */
+  vertical-align: middle;  /* Вирівнювання по вертикалі */
 }

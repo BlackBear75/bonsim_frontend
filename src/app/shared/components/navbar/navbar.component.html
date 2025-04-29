@@ -134,6 +134,14 @@
         <li><a routerLink="/shop" [class.active-link]="isActiveLink('/shop')" (click)="closeSidebar()">Магазин</a></li>
         <li><a routerLink="/about" [class.active-link]="isActiveLink('/about')" (click)="closeSidebar()">Про нас</a></li>
         <li><a routerLink="/contact" [class.active-link]="isActiveLink('/contact')" (click)="closeSidebar()">Контакти</a></li>
+
+        <li>
+          <a routerLink="/auth" [class.active-link]="isActiveLink('/auth')" (click)="closeSidebar()">
+            <img src="assets/img/login.png" alt="Login" class="sidebar-icon" />
+            Увійти
+          </a>
+        </li>
+
       </ng-container>
     </ul>
   </aside>

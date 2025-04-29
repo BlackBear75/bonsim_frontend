@@ -1,0 +1,62 @@
+<div class="personal-data-page">
+  <h2>Особисті дані</h2>
+
+  <form class="personal-form">
+    <div class="form-section row-section">
+      <div class="input-group">
+        <label for="firstName">Ім'я<span class="required-star">*</span></label>
+        <input id="firstName" type="text" placeholder="Введіть ім'я">
+      </div>
+
+      <div class="input-group">
+        <label for="lastName">Прізвище<span class="required-star">*</span></label>
+        <input id="lastName" type="text" placeholder="Введіть прізвище">
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label for="email">E-mail адреса<span class="required-star">*</span></label>
+      <input id="email" type="email" placeholder="Введіть E-mail">
+    </div>
+
+    <div class="form-section password-section">
+      <h3>Зміна пароля</h3>
+
+      <div class="password-group">
+        <label for="currentPassword">Поточний пароль<span class="required-star">*</span></label>
+        <div class="password-input">
+          <input [type]="showCurrentPassword ? 'text' : 'password'" id="currentPassword" placeholder="Введіть поточний пароль">
+          <img src="assets/img/eye-{{ showCurrentPassword ? 'open' : 'closed' }}.png"
+               alt="toggle"
+               (click)="togglePasswordVisibility('current')"
+               class="password-eye-icon" />
+        </div>
+      </div>
+
+      <div class="password-group">
+        <label for="newPassword">Новий пароль<span class="required-star">*</span></label>
+        <div class="password-input">
+          <input [type]="showNewPassword ? 'text' : 'password'" id="newPassword" placeholder="Введіть новий пароль">
+          <img src="assets/img/eye-{{ showNewPassword ? 'open' : 'closed' }}.png"
+               alt="toggle"
+               (click)="togglePasswordVisibility('new')"
+               class="password-eye-icon" />
+        </div>
+      </div>
+
+      <div class="password-group">
+        <label for="confirmPassword">Підтвердження пароля<span class="required-star">*</span></label>
+        <div class="password-input">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" placeholder="Підтвердіть новий пароль">
+          <img src="assets/img/eye-{{ showConfirmPassword ? 'open' : 'closed' }}.png"
+               alt="toggle"
+               (click)="togglePasswordVisibility('confirm')"
+               class="password-eye-icon" />
+        </div>
+      </div>
+    </div>
+
+
+    <button type="submit" class="save-button">Зберегти зміни</button>
+  </form>
+</div>

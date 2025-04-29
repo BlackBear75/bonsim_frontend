@@ -1,0 +1,120 @@
+.auth-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.auth-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  button {
+    background: none;
+    border: none; /* Забираємо всі бордери */
+    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s; /* Тільки зміна кольору тексту */
+  }
+
+  /* Для активної кнопки нема бордеру */
+  button.active {
+    font-weight: bold;
+    color: #000;
+  }
+
+  /* Не змінюється нічого при наведенні */
+  button:hover {
+    color: inherit; /* Не змінюється колір тексту */
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border 0.3s;
+
+    &:focus {
+      border-color: #000;
+      outline: none;
+    }
+  }
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+
+  &:hover {
+    background: #6c757d;
+  }
+}
+
+
+.forgot-password
+{
+  padding: 10px 5px 15px 5px;
+}
+.forgot-password a {
+  position: relative;
+  color: black;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.forgot-password a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: black;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.forgot-password a:hover::after {
+  width: 100%;
+}
+.password-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.password-eye-icon {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.form-group {
+  position: relative;
+}
+
