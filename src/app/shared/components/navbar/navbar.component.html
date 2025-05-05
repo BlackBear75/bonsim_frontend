@@ -77,8 +77,8 @@
     <ul class="sidebar-menu">
       <ng-container *ngIf="activeTab === 'categories'">
         <li class="has-submenu">
-          <div class="submenu-container">
-            <div class="submenu-toggle" (click)="goToCategory('men')">Чоловічий одяг</div>
+          <div class="submenu-container ">
+            <div class="submenu-toggle"   [routerLink]="['/gender', 'men']">Чоловічий одяг</div>
             <div class="submenu-arrow-container" (click)="toggleSubmenu('men')">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                    xmlns="http://www.w3.org/2000/svg"
@@ -102,8 +102,8 @@
 
         <li class="has-submenu">
           <div class="submenu-container">
-            <div class="submenu-toggle" (click)="goToCategory('women')">Жіночий одяг</div>
-            <div  class=submenu-arrow-container (click)="toggleSubmenu('women')">
+            <a class="submenu-toggle" [routerLink]="['/gender', 'women']">Жіночий одяг</a>
+            <div class="submenu-arrow-container" (click)="toggleSubmenu('women')">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                    xmlns="http://www.w3.org/2000/svg"
                    [ngClass]="{ 'rotate': isSubmenuOpen('women') }"
@@ -114,7 +114,8 @@
             </div>
           </div>
 
-          <ul *ngIf="isSubmenuOpen('women')" class="submenu">
+
+        <ul *ngIf="isSubmenuOpen('women')" class="submenu">
             <li><a routerLink="/products/women/hoodie "(click)="closeSidebar()" >Худі</a></li>
             <li><a routerLink="/products/women/tshirt"(click)="closeSidebar()">Футболки</a></li>
             <li><a routerLink="/products/women/pants"(click)="closeSidebar()">Штани</a></li>
@@ -137,11 +138,18 @@
 
         <li>
           <a routerLink="/auth" [class.active-link]="isActiveLink('/auth')" (click)="closeSidebar()">
-            <img src="assets/img/login.png" alt="Login" class="sidebar-icon" />
+            <img src="assets/img/login-icon.png" alt="Login" class="sidebar-icon" />
             Увійти
           </a>
         </li>
 
+        <li>
+          <a routerLink="/profile" [class.active-link]="isActiveLink('/profile')" (click)="closeSidebar()">
+            <img src="assets/img/login.png" alt="Account" class="sidebar-icon" />
+            Мій акаунт
+          </a>
+        </li>
       </ng-container>
+
     </ul>
   </aside>

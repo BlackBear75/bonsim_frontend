@@ -1,0 +1,31 @@
+<div class="hero-section">
+  <div class="hero-content">
+    <h1>BONSIM</h1>
+    <button class="btn">Новинки</button>
+    <button class="btn">Популярні товари</button>
+  </div>
+  <div class="hero-image" [ngStyle]="{ 'background-image': 'url(' + imageUrl + ')' }"></div>
+</div>
+
+<div class="popular-categories">
+  <h2>Популярні категорії</h2>
+  <div class="categories-container">
+    <div class="category-card" *ngFor="let category of categories">
+      <div class="category-image" [ngStyle]="{ 'background-image': 'url(' + category.imageUrl + ')' }"></div>
+      <h3>{{ category.name }}</h3>
+    </div>
+  </div>
+</div>
+<div class="products">
+  <h2>Популярні товари</h2>
+  <div class="products-container">
+    <app-product-card *ngFor="let product of popularProducts" [product]="product"></app-product-card>
+  </div>
+</div>
+
+<div class="products">
+  <h2>Новинки</h2>
+  <div class="products-container">
+    <app-product-card *ngFor="let product of newProducts" [product]="product"></app-product-card>
+  </div>
+</div>

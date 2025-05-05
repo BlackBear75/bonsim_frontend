@@ -1,0 +1,94 @@
+.product-category-page {
+  padding: 0 20% 5% 20%;
+
+  h2 {
+    margin-bottom: 16px;
+    text-transform: capitalize;
+  }
+
+  .product-category-controls {
+    margin-top:5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+  }
+
+  .product-count {
+    font-size: 12px !important;
+    color: #888;
+  }
+
+  .show-options {
+    font-size: 12px !important;
+    color: #7f7f7f;
+    display: flex;
+    gap: 10px;
+    span {
+      cursor: pointer;
+      color: #7f7f7f;
+      text-decoration: none;
+      transition: color 0.3s;
+      &:hover,
+      &.active {
+        color: #000;
+      }
+    }
+  }
+
+  .select-wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  select {
+    padding: 6px 12px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 28px;
+    appearance: none;
+    background-color: transparent;
+    padding-right: 30px; /* Додаємо місце для стрілки */
+    transition: background-size 0.3s ease;
+    position: relative;
+  }
+
+  /* Стрілка всередині */
+  .submenu-arrow-container {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Розміщуємо стрілку всередині праворуч */
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .submenu-arrow {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease; /* Анімація для стрілки */
+  }
+
+  .submenu-arrow.rotate {
+    transform: rotate(180deg); /* Ротація стрілки */
+  }
+
+  select:focus {
+    border-color: #007bff;
+  }
+
+  .product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+
+    app-product-card {
+      flex: 1 1 calc(25% - 24px);
+      max-width: calc(25% - 24px);
+    }
+  }
+}

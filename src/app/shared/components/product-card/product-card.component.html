@@ -1,0 +1,5 @@
+<div class="category-card">
+  <div class="category-image" [ngStyle]="{ 'background-image': 'url(' + product.imageUrl + ')' }"></div>
+  <h3>{{ product.name }}</h3>
+  <p class="price">{{ product.price | currency }}</p>
+</div>

@@ -1,0 +1,44 @@
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
+}

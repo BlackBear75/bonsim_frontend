@@ -1,0 +1,118 @@
+<div *ngIf="product" class="product-detail">
+  <div class="product-gallery">
+    <div class="thumbnails">
+      <button class="arrow-img up" (click)="scrollThumbnails('up')" [disabled]="startIndex === 0">
+        <img src="/assets/img/icon-right-arrow-angle.png" alt="up arrow" />
+      </button>
+
+      <div class="thumbnails-scroll">
+        <div class="thumbnails-inner" [style.transform]="getTranslateY()" [style.transition]="'transform 0.3s ease'">
+          <img *ngFor="let img of product.images"
+               [src]="img"
+               (click)="setMainImage(img)"
+               [class.selected]="img === selectedImage"
+               alt="thumbnail" />
+        </div>
+      </div>
+
+      <button class="arrow-img down" (click)="scrollThumbnails('down')"
+              [disabled]="startIndex + visibleCount >= product.images.length">
+        <img src="/assets/img/icon-right-arrow-angle.png" alt="down arrow" />
+      </button>
+    </div>
+
+
+
+    <div class="main-image">
+      <img [src]="selectedImage" alt="Main Product Image" />
+    </div>
+
+  </div>
+
+
+  <div class="product-info">
+    <h1 class="product-title">{{ product.name }}</h1>
+    <p class="price">{{ product.price }} грн</p>
+
+    <div class="size-selection">
+      <div class="size-header">
+        <label class="size-text">Оберіть розмір:</label>
+        <a class="size-link" [routerLink]="'/size-guide'" target="_blank">Таблиця розмірів</a>
+      </div>
+
+      <div class="size-row">
+        <div class="size-boxes">
+          <button *ngFor="let size of allSizes"
+                  class="size-box"
+                  [class.selected]="size === selectedSize"
+                  (click)="selectSize(size)">
+            {{ size }}
+          </button>
+        </div>
+
+        <button class="add-to-cart" (click)="addToCart()">Додати в кошик</button>
+      </div>
+    </div>
+    <div class="product-colors-wrapper">
+      <h2 class="colors-title">Кольори:</h2>
+
+      <div class="carousel-container">
+        <!-- Стрілки завжди в DOM -->
+        <button class="arrow left" (click)="scrollLeft()">‹</button>
+
+        <div class="color-variants" #carousel>
+          <app-product-card
+            *ngFor="let variant of product.colorVariants"
+            [product]="variant">
+          </app-product-card>
+        </div>
+
+        <button class="arrow right" (click)="scrollRight()">›</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <a href="#" [class.active]="activeTab === 'description'" (click)="setActiveTab('description'); $event.preventDefault()" class="tab-link">Опис товару</a>
+      <a href="#" [class.active]="activeTab === 'paymentAndDelivery'" (click)="setActiveTab('paymentAndDelivery'); $event.preventDefault()" class="tab-link">Оплата та Доставка</a>
+      <a href="#" [class.active]="activeTab === 'returnAndExchange'" (click)="setActiveTab('returnAndExchange'); $event.preventDefault()" class="tab-link">Обмін та Повернення</a>
+    </div>
+
+    <div class="tab-content">
+      <div [class.active]="activeTab === 'description'" class="tab-description">
+        <h2>Опис товару</h2>
+        <p>{{ product.description }}</p>
+        <h3>Матеріал:</h3>
+        <p>{{ product.material }}</p>
+        <h3>Деталі та крій:</h3>
+        <p>{{ product.detailsAndCut }}</p>
+        <h3>Догляд:</h3>
+        <p>{{ product.care }}</p>
+        <h3>На фото:</h3>
+        <p>{{ product.onModel }}</p>
+      </div>
+      <div [class.active]="activeTab === 'paymentAndDelivery'" class="tab-payment-delivery">
+        <h2>Оплата та Доставка</h2>
+        <p>Доступні способи оплати: банківські картки, готівка при доставці.</p>
+        <p>Товари доставляються за допомогою кур'єрів або через відділення Нової Пошти.</p>
+      </div>
+
+      <div [class.active]="activeTab === 'returnAndExchange'" class="tab-return-exchange">
+        <h2>Обмін та Повернення</h2>
+        <p>Якщо вам не підійшов розмір, колір або ви виявили інші проблеми протягом 14 днів після покупки, ви можете повернути нам товар або обміняти на інший.</p>
+        <p>Потрібно завантажити та заповнити заяву за посиланням  – <a href="URL_для_заяви" target="_blank">ОБМІН ТА ПОВЕРНЕННЯ</a></p>
+        <p>Заповнену заяву потрібно надіслати в один із наших месенджерів:</p>
+        <ul>
+          <li><a href="https://www.instagram.com" target="_blank">Instagram</a></li>
+          <li><a href="https://t.me" target="_blank">Telegram</a></li>
+          <li><a href="https://www.viber.com" target="_blank">Viber</a></li>
+        </ul>
+        <p>Доставка оплачується покупцем у разі повернення чи обміну товару. Якщо причина повернення була з нашого боку, доставку повністю оплачуємо ми. Повернення коштів відбувається до 7 робочих днів після отримання товару.</p>
+        <p>Робочий графік гарячої лінії: Пн-Пт з 8:00 – 17:00.</p>
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>

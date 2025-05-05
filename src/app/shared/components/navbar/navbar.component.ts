@@ -20,19 +20,7 @@ export class NavbarComponent {
   searchText = '';
   isNavbarSticky = false;
 
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    const navbar = document.querySelector('.navbar');
-    if (!navbar) return;
 
-    const offsetTop = window.scrollY || document.documentElement.scrollTop;
-
-    if (offsetTop > 0) {
-      navbar.classList.add('sticky');
-    } else {
-      navbar.classList.remove('sticky');
-    }
-  }
 
 
 

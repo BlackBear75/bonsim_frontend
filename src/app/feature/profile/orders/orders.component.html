@@ -1,1 +1,36 @@
-<p>orders works!</p>
+<h2>Мої замовлення</h2>
+<table class="orders-table">
+  <thead>
+  <tr>
+    <th>№</th>
+    <th>ТТН</th>
+    <th>Список товарів</th>
+    <th>До сплати</th>
+    <th>Статус</th>
+    <th>Дата створення</th>
+    <th>Завантаження</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let order of orders">
+    <td>{{ order.orderNumber }}</td>
+    <td>{{ order.ttn }}</td>
+    <td>
+      <ul>
+        <li *ngFor="let item of order.items">
+          {{ item.name }} — {{ item.quantity }} шт.
+        </li>
+      </ul>
+    </td>
+    <td>{{ order.total }} грн</td>
+    <td>{{ order.status }}</td>
+    <td>{{ order.createdAt | date: 'dd.MM.yyyy HH:mm' }}</td>
+    <td>
+      <a [href]="order.receiptUrl" target="_blank" download class="download-btn">
+        Завантажити
+        <img src="assets/img/download-icon.png" alt="Завантажити" />
+      </a>
+    </td>
+  </tr>
+  </tbody>
+</table>

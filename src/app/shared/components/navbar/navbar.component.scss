@@ -1,5 +1,5 @@
 .navbar {
-  position: relative;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -8,18 +8,8 @@
   padding: 1rem;
   padding-left: 12%;
   z-index: 100;
-
-  transition: all 0.5s ease;
-
-  &.sticky {
-    position: fixed;
-    top: 0;
-    left: 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
-
 
 
 .nav-container {

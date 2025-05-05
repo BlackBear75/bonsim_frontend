@@ -1,0 +1,14 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onCancel()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Підтвердження видалення</h2>
+    </div>
+    <div class="modal-body">
+      <p>Ви дійсно хочете видалити цей елемент?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-confirm" (click)="onConfirm()">Так</button>
+      <button class="btn-cancel" (click)="onCancel()">Ні</button>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,88 @@
-<p>addresses works!</p>
+<div class="addresses-page">
+  <h1>Адреси доставки</h1>
+  <div class="address-list" *ngIf="addresses.length > 0">
+    <h2>Ваші адреси:</h2>
+    <div *ngFor="let address of addresses; let i = index" class="address-item">
+      <div class="address-details">
+        <p><strong>{{ address.lastName }} {{ address.firstName }} {{ address.middleName }}</strong></p>
+        <p>{{ address.streetName }}, {{ address.streetDetails }}</p>
+        <p>{{ address.city }}, {{ address.region }}, {{ address.postalCode }}</p>
+        <p>{{ address.country }}</p>
+      </div>
+      <div class="address-actions">
+        <button class="edit-btn" (click)="editAddress(i)">Редагувати</button>
+        <button class="delete-btn" (click)="confirmDelete(i)">Видалити</button>
+      </div>
+    </div>
+  </div>
+  <button class="add-address-button" (click)="startAddingAddress()">Додати адресу доставки</button>
+
+  <!-- Modal for delete confirmation -->
+  <app-confirm-delete-modal
+    *ngIf="showConfirmDialog"
+    [isVisible]="showConfirmDialog"
+    (confirm)="onDeleteConfirmed()"
+    (cancel)="onDeleteCancelled()">
+  </app-confirm-delete-modal>
+
+  <!-- Address form section -->
+  <div *ngIf="isAddingAddress" class="address-form-container">
+    <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Ім'я <span class="required">*</span></label>
+        <input type="text" formControlName="firstName" />
+      </div>
+      <div class="form-group">
+        <label>Прізвище <span class="required">*</span></label>
+        <input type="text" formControlName="lastName" />
+      </div>
+      <div class="form-group">
+        <label>По батькові</label>
+        <input type="text" formControlName="middleName" />
+      </div>
+      <div class="form-group">
+        <label>Назва компанії</label>
+        <input type="text" formControlName="companyName" />
+      </div>
+      <div class="form-group">
+        <label>Країна/Регіон</label>
+        <div class="fixed-country">Україна</div>
+      </div>
+
+      <div class="form-group">
+        <label>Назва вулиці <span class="required">*</span></label>
+        <input type="text" formControlName="streetName" />
+      </div>
+      <div class="form-group">
+        <label>Деталі вулиці (будинок, офіс тощо)</label>
+        <input type="text" formControlName="streetDetails" />
+      </div>
+      <div class="form-group">
+        <label>Місто / Село <span class="required">*</span></label>
+        <input type="text" formControlName="city" />
+      </div>
+
+      <div class="form-group">
+        <label>Область/Округ</label>
+        <div class="custom-dropdown" (click)="toggleDropdown($event)">
+          <div class="selected-value">{{ selectedRegion || 'Виберіть область' }}</div>
+          <div class="dropdown-menu" [ngClass]="{'show': isDropdownOpen}">
+            <div *ngFor="let region of ukraineRegions" (click)="selectRegion(region, $event)">
+              {{ region }}
+            </div>
+          </div>
+          <div class="arrow-icon">
+            <i class="fa fa-chevron-down" [class.open]="isDropdownOpen"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Поштовий індекс <span class="required">*</span></label>
+        <input type="text" formControlName="postalCode" />
+      </div>
+
+      <button type="submit" class="submit-button">Зберегти адресу</button>
+    </form>
+  </div>
+</div>

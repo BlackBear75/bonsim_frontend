@@ -1,0 +1,38 @@
+<div class="product-category-page">
+
+
+  <div class="product-category-controls">
+    <p class="product-count">Показано {{ start + 1 }}–{{ end }} із {{ total }} товарів</p>
+
+    <p class="show-options">
+      Показати:
+      <span
+        *ngFor="let option of showOptions"
+        (click)="changePerPage(option)"
+        [ngClass]="{'active': option === perPage}"
+        class="clickable-option">
+        {{ option }}
+        <span *ngIf="option !== showOptions[showOptions.length - 1]">/</span>
+      </span>
+      <span>товарів</span>
+    </p>
+
+    <div class="select-wrapper" (click)="toggleDropdown()">
+      <select [(ngModel)]="sortOption" (change)="sortProducts()">
+        <option value="latest">Останні</option>
+        <option value="price-asc">Ціна: від дешевих до дорогих</option>
+        <option value="price-desc">Ціна: від дорогих до дешевих</option>
+      </select>
+      <div class="submenu-arrow-container">
+        <svg class="submenu-arrow" [ngClass]="{'rotate': isDropdownOpen}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+          <path d="M7 10l5 5 5-5" stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="product-list">
+    <app-product-card *ngFor="let product of paginatedProducts" [product]="product"></app-product-card>
+  </div>
+</div>
