@@ -78,7 +78,11 @@
       <ng-container *ngIf="activeTab === 'categories'">
         <li class="has-submenu">
           <div class="submenu-container ">
-            <div class="submenu-toggle"   [routerLink]="['/gender', 'men']">Чоловічий одяг</div>
+            <div
+              class="submenu-toggle"
+              (click)="goToCategory('чоловічий одяг'); toggleSubmenu('men')">
+              Чоловічий одяг
+            </div>
             <div class="submenu-arrow-container" (click)="toggleSubmenu('men')">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                    xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +106,11 @@
 
         <li class="has-submenu">
           <div class="submenu-container">
-            <a class="submenu-toggle" [routerLink]="['/gender', 'women']">Жіночий одяг</a>
+            <div
+              class="submenu-toggle"
+              (click)="goToCategory('жіночий одяг'); toggleSubmenu('women')">
+              Жіночий одяг
+            </div>
             <div class="submenu-arrow-container" (click)="toggleSubmenu('women')">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                    xmlns="http://www.w3.org/2000/svg"
@@ -124,31 +132,42 @@
         </li>
 
 
-        <li><a routerLink="/discounts" (click)="closeSidebar()">Знижки</a></li>
+        <li><a routerLink="product-category/monthly-event" (click)="closeSidebar()">Тренд місяця</a></li>
 
 
       </ng-container>
 
-      <!-- Інформація -->
       <ng-container *ngIf="activeTab === 'info'">
         <li><a routerLink="/" [class.active-link]="isActiveLink('/')" (click)="closeSidebar()">Головна</a></li>
-        <li><a routerLink="/shop" [class.active-link]="isActiveLink('/shop')" (click)="closeSidebar()">Магазин</a></li>
+
+        <li><a routerLink="/size-chart" [class.active-link]="isActiveLink('/size-chart')" (click)="closeSidebar()">Розмірна сітка</a></li>
         <li><a routerLink="/about" [class.active-link]="isActiveLink('/about')" (click)="closeSidebar()">Про нас</a></li>
+        <li><a routerLink="/shipping" [class.active-link]="isActiveLink('/shipping')" (click)="closeSidebar()">Доставка і Оплата</a></li>
+
+
         <li><a routerLink="/contact" [class.active-link]="isActiveLink('/contact')" (click)="closeSidebar()">Контакти</a></li>
 
-        <li>
+        <li *ngIf="!isAuthenticated">
           <a routerLink="/auth" [class.active-link]="isActiveLink('/auth')" (click)="closeSidebar()">
             <img src="assets/img/login-icon.png" alt="Login" class="sidebar-icon" />
             Увійти
           </a>
         </li>
 
-        <li>
+        <li *ngIf="isAuthenticated">
           <a routerLink="/profile" [class.active-link]="isActiveLink('/profile')" (click)="closeSidebar()">
             <img src="assets/img/login.png" alt="Account" class="sidebar-icon" />
             Мій акаунт
           </a>
         </li>
+
+        <li *ngIf="isAuthenticated">
+          <a (click)="logout()">
+            <img src="assets/img/login-icon.png" alt="Logout" class="sidebar-icon" />
+            Вийти
+          </a>
+        </li>
+
       </ng-container>
 
     </ul>

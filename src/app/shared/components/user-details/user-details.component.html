@@ -1,0 +1,28 @@
+<div class="modal-backdrop" (click)="close.emit()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Деталі користувача</h3>
+    <p><strong>Ім’я:</strong> {{ user.firstName }}</p>
+    <p><strong>Прізвище:</strong> {{ user.lastName }}</p>
+    <p><strong>Телефон:</strong> {{ user.phone }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Загальна сума витрат:</strong> {{ user.totalSpent | currency:'UAH' }}</p>
+    <p><strong>Замовлення:</strong></p>
+    <ul>
+      <li *ngFor="let order of user.orders">
+        {{ order.date }} — {{ order.amount | currency:'UAH' }}
+      </li>
+    </ul>
+
+    <div class="actions">
+      <button class="close" (click)="close.emit()">Закрити</button>
+      <button class="delete" (click)="openConfirmModal()">Видалити</button>
+    </div>
+
+    <app-confirm-delete-modal
+      *ngIf="isConfirmVisible"
+      [isVisible]="isConfirmVisible"
+      (confirm)="handleConfirm()"
+      (cancel)="handleCancel()"
+    />
+  </div>
+</div>

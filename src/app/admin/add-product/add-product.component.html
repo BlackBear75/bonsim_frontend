@@ -1,0 +1,40 @@
+<div class="add-product-container">
+  <h2>Додати товар</h2>
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit(fileInput)">
+    <div class="form-group">
+      <label for="type">Вид товару</label>
+      <select id="type" formControlName="type">
+        <option value="" disabled selected>Оберіть тип</option>
+        <option *ngFor="let type of productTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="print">Принт</label>
+      <select id="print" formControlName="print">
+        <option value="" disabled selected>Оберіть принт</option>
+        <option *ngFor="let print of prints" [value]="print">{{ print }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="color">Колір</label>
+      <select id="color" formControlName="color">
+        <option value="" disabled selected>Оберіть колір</option>
+        <option *ngFor="let color of colors" [value]="color">{{ color }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="images">Фото (до 5)</label>
+      <input id="images" #fileInput type="file" (change)="onFileChange($event)" multiple />
+      <div class="preview-container">
+        <img *ngFor="let img of imagesPreview" [src]="img" alt="Прев’ю" />
+      </div>
+
+      <div class="error" *ngIf="imageError">{{ imageError }}</div>
+    </div>
+
+    <button type="submit">Додати товар</button>
+  </form>
+</div>

@@ -1,0 +1,75 @@
+<div class="order-details">
+  <h3>Деталі замовлення</h3>
+
+  <p><strong>Клієнт:</strong> {{ order.customer.firstName }} {{ order.customer.lastName }}</p>
+  <p><strong>Email:</strong> {{ order.customer.email }}</p>
+  <p><strong>Телефон:</strong> {{ order.customer.phone }}</p>
+  <p><strong>Адреса доставки:</strong> {{ order.shippingAddress }}</p>
+  <p><strong>Тип оплати:</strong> {{ order.paymentMethod === 'online' ? 'Онлайн оплата' : 'Післясплата' }}</p>
+  <p><strong>Дата замовлення:</strong> {{ order.date | date:'longDate' }}</p>
+  <p><strong>Сума:</strong> {{ order.total | currency:'UAH' }}</p>
+
+  <!-- Поле для ТТН -->
+  <label>
+    ТТН:
+    <input type="text" [(ngModel)]="order.ttn" placeholder="Введіть номер ТТН" />
+  </label>
+
+  <!-- Зміна статусу замовлення -->
+  <label>
+    Статус замовлення:
+    <select [(ngModel)]="order.status">
+      <option value="Очікується підтвердження">Очікується підтвердження</option>
+      <option value="Відправлено">Відправлено</option>
+      <option value="Завершено">Завершено</option>
+      <option value="Скасовано">Скасовано</option>
+    </select>
+  </label>
+
+  <!-- Статус оплати -->
+  <label>
+    Статус оплати:
+    <select [(ngModel)]="order.paymentStatus">
+      <option value="Очікується оплата">Очікується оплата</option>
+      <option value="Післясплата">Післясплата</option>
+      <option value="Оплачено">Оплачено</option>
+    </select>
+  </label>
+
+  <label>
+    Статус доставки:
+    <select [(ngModel)]="order.deliveryStatus">
+      <option value="Очікується">Очікується</option>
+      <option value="В процесі доставки">В процесі доставки</option>
+      <option value="Доставлено">Доставлено</option>
+      <option value="Не доставлено">Не доставлено</option>
+    </select>
+  </label>
+
+  <h4>Товари</h4>
+  <table class="items-table">
+    <thead>
+    <tr>
+      <th>Назва</th>
+      <th>К-сть</th>
+      <th>Ціна</th>
+      <th>Сума</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of order.items">
+      <td>{{ item.product }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.price | currency:'UAH' }}</td>
+      <td>{{ item.price * item.quantity | currency:'UAH' }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+
+  <div class="actions">
+    <button (click)="onClose()">Закрити</button>
+    <button class="save-btn" (click)="onSave()">Зберегти</button>
+  </div>
+
+</div>

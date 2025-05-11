@@ -51,16 +51,15 @@
     height: 28px;
     appearance: none;
     background-color: transparent;
-    padding-right: 30px; /* Додаємо місце для стрілки */
+    padding-right: 30px;
     transition: background-size 0.3s ease;
     position: relative;
   }
 
-  /* Стрілка всередині */
   .submenu-arrow-container {
     position: absolute;
     top: 50%;
-    right: 10px; /* Розміщуємо стрілку всередині праворуч */
+    right: 10px;
     transform: translateY(-50%);
     pointer-events: none;
   }
@@ -69,11 +68,11 @@
     display: inline-block;
     width: 16px;
     height: 16px;
-    transition: transform 0.3s ease; /* Анімація для стрілки */
+    transition: transform 0.3s ease;
   }
 
   .submenu-arrow.rotate {
-    transform: rotate(180deg); /* Ротація стрілки */
+    transform: rotate(180deg);
   }
 
   select:focus {
@@ -91,4 +90,11 @@
       max-width: calc(25% - 24px);
     }
   }
+}
+.category-heading {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #333;
 }

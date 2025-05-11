@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ProductCardComponent} from '../../shared/components/product-card/product-card.component';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
@@ -26,7 +26,7 @@ interface Product {
 export class ProductCategoryComponent implements OnInit {
   category: string | null = '';
 
-  isDropdownOpen = false;  // Стан дропдауну для відслідковування відкриття/закриття
+  isDropdownOpen = false;
 
 
 
@@ -36,9 +36,9 @@ export class ProductCategoryComponent implements OnInit {
     { name: 'Лонгслів білий', price: 850, imageUrl: '/assets/img/banner_img_01.jpg', category: 'лонгсліви' },
     { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'футболки' },
 
-    { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'футболки' },
-    { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'футболки' },
-    { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'футболки' },
+    { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'жіночий одяг' },
+    { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'чоловічий одяг' },
+    { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'monthly-event' },
     { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'футболки' },
     { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'футболки' },
     { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'футболки' },
@@ -47,15 +47,15 @@ export class ProductCategoryComponent implements OnInit {
     { name: 'Футболка біла', price: 600, imageUrl: '/assets/img/banner_img_01.jpg', category: 'футболки' },
   ];
 
-  showOptions = [9, 12, 18, 24];  // Кількість товарів для показу
-  perPage = 12; // За замовчуванням показуємо 12 товарів
+  showOptions = [9, 12, 18, 24];
+  perPage = 12;
   paginatedProducts: Product[] = [];
   sortOption = 'latest';
   start = 0;
   end = 0;
   total = 0;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -68,7 +68,6 @@ export class ProductCategoryComponent implements OnInit {
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
-  // Закриваємо дропдаун, якщо користувач натискає за межами
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
     const dropdown = document.querySelector('.select-wrapper');
@@ -82,15 +81,21 @@ export class ProductCategoryComponent implements OnInit {
       ? this.products.filter(p => p.category === this.category)
       : this.products;
 
+    if (this.category && filtered.length === 0) {
+      this.router.navigate(['/404']);
+      return;
+    }
+
     this.total = filtered.length;
     this.start = 0;
     this.end = Math.min(this.perPage, this.total);
     this.paginatedProducts = filtered.slice(this.start, this.end);
   }
 
+
   changePerPage(option: number) {
     this.perPage = option;
-    this.loadProducts();  // Оновлюємо продукти після зміни кількості
+    this.loadProducts();
   }
 
   sortProducts() {

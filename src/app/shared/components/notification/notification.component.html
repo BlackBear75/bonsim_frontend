@@ -1,0 +1,10 @@
+<div *ngIf="visible" class="notification" [ngClass]="type">
+  <div class="icon">
+    <ng-container [ngSwitch]="type">
+      <img *ngSwitchCase="'success'" src="assets/img/icon-check.png" alt="Success">
+      <img *ngSwitchCase="'error'" src="assets/img/icon-cross-mark.png" alt="Error">
+    </ng-container>
+  </div>
+  <div class="message">{{ message }}</div>
+  <button class="close-btn" (click)="close()">×</button>
+</div>

@@ -1,0 +1,45 @@
+.shipping-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.shipping-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.shipping-image {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.shipping-image img {
+  max-width: 250px;
+  height: auto;
+}
+
+.shipping-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.shipping-card {
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  width: 300px;
+}
+
+.shipping-card h2 {
+  margin-bottom: 15px;
+  color: #000000;
+}
+
+.shipping-card ul {
+  list-style: disc;
+  padding-left: 20px;
+}

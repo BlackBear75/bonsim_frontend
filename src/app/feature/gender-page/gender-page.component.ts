@@ -34,14 +34,15 @@ export class GenderPageComponent implements OnInit {
     { name: 'Худі', price: 1200, imageUrl: '/assets/img/banner_img_01.jpg' },
     { name: 'Футболка', price: 800, imageUrl: '/assets/img/banner_img_01.jpg' },
     { name: 'Штани', price: 1500, imageUrl: '/assets/img/banner_img_01.jpg' },
-    { name: 'Куртка', price: 2500, imageUrl: '/assets/img/banner_img_01.jpg' }
+    { name: 'Куртка', price: 2500, imageUrl: '/assets/img/banner_img_01.jpg' },
+    { name: 'Куртка', price: 2500, imageUrl: '/assets/img/banner_img_01.jpg' },
   ];
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.gender = params.get('gender') || '';
+      const gender = this.route.snapshot.data['gender'];
       this.setImageUrl();
     });
   }

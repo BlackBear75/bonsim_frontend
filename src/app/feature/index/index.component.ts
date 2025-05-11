@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {RouterLink, RouterOutlet} from '@angular/router';
+import {NotificationComponent} from '../../shared/components/notification/notification.component';
 
 @Component({
   selector: 'app-index',
   standalone: true,
   templateUrl: './index.component.html',
   imports: [
-    RouterLink
+    RouterLink,
+    NotificationComponent,
+    RouterOutlet
   ],
   styleUrl: './index.component.scss'
 })

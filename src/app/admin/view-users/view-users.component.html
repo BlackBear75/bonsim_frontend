@@ -1,0 +1,46 @@
+<div class="view-users-container">
+  <h2>Список користувачів</h2>
+
+  <!-- 🔍 Фільтрація -->
+  <div class="filter-section">
+    <input type="text" placeholder="Ім'я" [(ngModel)]="filter.firstName" />
+    <input type="text" placeholder="Прізвище" [(ngModel)]="filter.lastName" />
+    <input type="text" placeholder="Пошта" [(ngModel)]="filter.email" />
+    <button (click)="applyFilter()">Пошук</button>
+    <button (click)="clearFilter()">Очистити</button>
+  </div>
+
+  <table class="users-table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Ім'я</th>
+      <th>Прізвище</th>
+      <th>Телефон</th>
+      <th>Пошта</th>
+      <th>Дії</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of filteredUsers; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ user.firstName }}</td>
+      <td>{{ user.lastName }}</td>
+      <td>{{ user.phone }}</td>
+      <td>{{ user.email }}</td>
+      <td><button (click)="selectUser(user)">Показати</button></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Модальне вікно -->
+<div class="modal-backdrop" *ngIf="selectedUser">
+  <div class="modal-content">
+    <user-details
+      [user]="selectedUser"
+      (close)="selectedUser = null"
+      (deleteUser)="handleUserDelete($event)"
+    />
+  </div>
+</div>

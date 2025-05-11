@@ -55,7 +55,6 @@ export class ProductComponent implements OnInit {
   scrollThumbnails(direction: 'up' | 'down') {
     if (!this.product?.images) return;
 
-    // Обмежуємо кількість скролінгу на основі visibleCount
     if (direction === 'up' && this.startIndex > 0) {
       this.startIndex--;
     } else if (
@@ -70,6 +69,7 @@ export class ProductComponent implements OnInit {
   setActiveTab(tab: string) {
     this.activeTab = tab;
   }
+
   @ViewChild('carousel', { static: false }) carousel!: ElementRef;
   showArrows = false;
   currentIndex = 0;

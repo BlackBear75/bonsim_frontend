@@ -73,11 +73,15 @@
 
     <div class="tabs">
       <a href="#" [class.active]="activeTab === 'description'" (click)="setActiveTab('description'); $event.preventDefault()" class="tab-link">Опис товару</a>
+
       <a href="#" [class.active]="activeTab === 'paymentAndDelivery'" (click)="setActiveTab('paymentAndDelivery'); $event.preventDefault()" class="tab-link">Оплата та Доставка</a>
+
       <a href="#" [class.active]="activeTab === 'returnAndExchange'" (click)="setActiveTab('returnAndExchange'); $event.preventDefault()" class="tab-link">Обмін та Повернення</a>
     </div>
 
     <div class="tab-content">
+
+
       <div [class.active]="activeTab === 'description'" class="tab-description">
         <h2>Опис товару</h2>
         <p>{{ product.description }}</p>
@@ -90,11 +94,39 @@
         <h3>На фото:</h3>
         <p>{{ product.onModel }}</p>
       </div>
+
       <div [class.active]="activeTab === 'paymentAndDelivery'" class="tab-payment-delivery">
         <h2>Оплата та Доставка</h2>
-        <p>Доступні способи оплати: банківські картки, готівка при доставці.</p>
-        <p>Товари доставляються за допомогою кур'єрів або через відділення Нової Пошти.</p>
+        <div class="delivery-method">
+          <div class="delivery-icon-container">
+            <img src="/assets/img/icon_nova_poshta.svg" alt="Нова Пошта" class="delivery-icon" />
+          </div>
+
+          <div class="delivery-info">
+            <div class="payment-options">
+              <h4>Післяплата:</h4>
+              <ul>
+                <li>Вартість доставки від 70 грн</li>
+                <li>Комісія пошти за післяплату 2% + 20 грн від суми замовлення</li>
+                <li>Без Передоплати</li>
+                <li>Доставка 2-4 дні</li>
+              </ul>
+            </div>
+
+            <div class="payment-options">
+              <h4>Онлайн оплата:</h4>
+              <ul>
+                <li>Вартість доставки від 65 грн</li>
+                <li>Безкоштовна доставка від 2500 грн</li>
+                <li>Без комісії пошти</li>
+                <li>Доставка 2-4 дні</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
       </div>
+
 
       <div [class.active]="activeTab === 'returnAndExchange'" class="tab-return-exchange">
         <h2>Обмін та Повернення</h2>
@@ -112,6 +144,7 @@
 
 
     </div>
+
 
   </div>
 

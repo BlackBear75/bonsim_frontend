@@ -1,0 +1,18 @@
+.size-chart-table {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.size-chart-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.recommendations p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #444;
+}

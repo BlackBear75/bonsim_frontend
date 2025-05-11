@@ -1,0 +1,26 @@
+<div class="size-chart-container">
+  <div class="sidebar">
+    <button
+      *ngFor="let category of categories"
+      mat-button
+      [class.active]="category === selectedCategory"
+      (click)="onCategorySelect(category)">
+      {{ category | titlecase }}
+    </button>
+  </div>
+
+  <div class="content">
+    <div class="subcategory-buttons">
+      <button
+        *ngFor="let sub of subcategoriesMap[selectedCategory]; let i = index"
+        mat-stroked-button
+        [class.active]="i === selectedSubcategoryIndex"
+        (click)="onSubcategoryChange(i)">
+        {{ sub.label }}
+      </button>
+    </div>
+
+    <!-- ТАБЛИЦЯ -->
+    <app-size-chart-table [category]="selectedSubcategory"></app-size-chart-table>
+  </div>
+</div>

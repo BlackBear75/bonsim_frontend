@@ -23,15 +23,16 @@
 <body>
 
 
+<div class="page-wrapper">
+  <app-navbar></app-navbar>
 
-<app-navbar></app-navbar>
+  <div class="page-content">
+    <router-outlet></router-outlet>
+  </div>
 
-
-<router-outlet></router-outlet>
-
-<app-footer></app-footer>
-
-
+  <app-footer></app-footer>
+</div>
+<app-notification></app-notification>
 
 
 <script src="assets/js/jquery-1.11.0.min.js"></script>

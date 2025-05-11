@@ -1,0 +1,48 @@
+<div class="add-category-container">
+  <div class="selection-container">
+    <h2>Вибір категорії для додавання</h2>
+    <div class="category-options">
+      <button (click)="showCategory('color')">Колір</button>
+      <button (click)="showCategory('type')">Вид товару</button>
+      <button (click)="showCategory('print')">Принт</button>
+    </div>
+    <div class="category-list">
+      <h3 *ngIf="selectedCategory === 'color'">Список наявних кольорів</h3>
+      <h3 *ngIf="selectedCategory === 'type'">Список наявних видів товару</h3>
+      <h3 *ngIf="selectedCategory === 'print'">Список наявних принтів</h3>
+      <ul>
+        <li *ngFor="let item of selectedItems; let i = index" class="category-item">
+          <span>{{ item }}</span>
+          <button (click)="openDeleteModal(i)" class="delete-button">Видалити</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <h2>Додати новий елемент</h2>
+    <div *ngIf="selectedCategory === 'color'">
+      <label for="newColor">Новий колір</label>
+      <input type="text" id="newColor" [(ngModel)]="newItem" placeholder="Введіть колір" />
+      <button (click)="openConfirmDialog('color')">Додати колір</button>
+    </div>
+
+    <div *ngIf="selectedCategory === 'type'">
+      <label for="newType">Новий вид товару</label>
+      <input type="text" id="newType" [(ngModel)]="newItem" placeholder="Введіть вид товару" />
+      <button (click)="openConfirmDialog('type')">Додати вид товару</button>
+    </div>
+
+    <div *ngIf="selectedCategory === 'print'">
+      <label for="newPrint">Новий принт</label>
+      <input type="text" id="newPrint" [(ngModel)]="newItem" placeholder="Введіть принт" />
+      <button (click)="openConfirmDialog('print')">Додати принт</button>
+    </div>
+  </div>
+</div>
+
+<app-confirm-delete-modal
+  [isVisible]="isDeleteModalVisible"
+  (confirm)="onDeleteConfirmed()"
+  (cancel)="onDeleteCancelled()">
+</app-confirm-delete-modal>

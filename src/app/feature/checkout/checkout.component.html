@@ -1,0 +1,84 @@
+<div class="checkout-container">
+  <!-- Права частина: Список замовлених товарів -->
+  <div class="order-list">
+    <h3>Ваше замовлення</h3>
+    <ul>
+      <li *ngFor="let item of cartItems">
+        {{ item.name }} — {{ item.quantity }} x {{ item.price }} грн
+      </li>
+    </ul>
+    <p><strong>До сплати:</strong> {{ totalAmount }} грн</p>
+  </div>
+
+  <!-- Ліва частина: Форма оформлення замовлення -->
+  <div class="checkout-form">
+    <h2>Оформлення замовлення</h2>
+
+    <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+      <!-- 📌 Клієнтські дані -->
+      <section>
+        <h3>Ваші дані</h3>
+        <label class="required">Прізвище</label>
+        <input formControlName="lastName" placeholder="Прізвище" />
+
+        <label class="required">Ім’я</label>
+        <input formControlName="firstName" placeholder="Ім’я" />
+
+        <label>По батькові (необов'язково)</label>
+        <input formControlName="middleName" placeholder="По батькові (необов'язково)" />
+
+        <label class="required">Email</label>
+        <input formControlName="email" placeholder="Email" type="email" />
+
+        <label class="required">Телефон</label>
+        <input formControlName="phone" placeholder="Телефон" type="tel" />
+      </section>
+
+      <!-- 📦 Доставка -->
+      <section>
+        <h3>Доставка</h3>
+
+        <!-- Пошук міста -->
+        <label class="required">Місто або село</label>
+        <input
+          formControlName="city"
+          placeholder="Місто або село"
+          (input)="onCityChange(checkoutForm.value.city)"
+          [attr.autocomplete]="'off'"
+        />
+
+        <!-- Список міст -->
+        <ul *ngIf="cities.length > 0" class="dropdown">
+          <li *ngFor="let c of cities" (click)="checkoutForm.patchValue({ city: c.label }); getWarehouses(c.ref)">
+            {{ c.label }}
+          </li>
+        </ul>
+
+        <!-- Відділення -->
+        <label class="required">Оберіть відділення</label>
+        <select formControlName="warehouse">
+          <option value="" disabled selected>Оберіть відділення</option>
+          <option *ngFor="let w of warehouses" [value]="w.description">{{ w.description }}</option>
+        </select>
+      </section>
+
+      <!-- 💳 Оплата -->
+      <section>
+        <h3>Оплата</h3>
+        <label>
+          <input type="radio" formControlName="paymentType" value="cash" />
+          Післяплата
+        </label>
+        <label>
+          <input type="radio" formControlName="paymentType" value="card" />
+          Онлайн оплата
+        </label>
+      </section>
+
+      <!-- 📤 Кнопка -->
+      <button type="submit" [disabled]="checkoutForm.invalid">
+        Підтвердити замовлення
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<div class="view-orders-container">
+  <h2>Список замовлень</h2>
+  <div class="filters">
+    <input
+      type="text"
+      placeholder="Пошук по імені або прізвищу"
+      [(ngModel)]="searchTerm"
+      class="name-search"
+    />
+
+    <select [(ngModel)]="selectedStatus">
+      <option value="">Усі статуси</option>
+      <option value="Очікується підтвердження">Очікується підтвердження</option>
+      <option value="Відправлено">Відправлено</option>
+      <option value="Завершено">Завершено</option>
+      <option value="Скасовано">Скасовано</option>
+    </select>
+  </div>
+
+  <table class="orders-table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Ім’я</th>
+      <th>Email</th>
+      <th>Дата</th>
+      <th>Сума</th>
+      <th>Статус</th>
+      <th>Дії</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let order of filteredOrders(); let i = index">
+
+      <td>{{ i + 1 }}</td>
+      <td>{{ order.customer.firstName }} {{ order.customer.lastName }}</td>
+      <td>{{ order.customer.email }}</td>
+      <td>{{ order.date | date:'shortDate' }}</td>
+      <td>{{ order.total | currency:'UAH' }}</td>
+      <td>{{ order.status }}</td>
+      <td>
+        <button class="button-show" (click)="selectOrder(order)">Показати</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Модальне вікно з деталями -->
+  <div class="modal-backdrop" *ngIf="selectedOrder">
+    <div class="modal-content">
+      <order-details
+        [order]="selectedOrder"
+        (close)="selectedOrder = null"
+        (save)="onOrderSave($event)"
+      ></order-details>
+    </div>
+  </div>
+</div>

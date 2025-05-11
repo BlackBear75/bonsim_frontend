@@ -1,0 +1,26 @@
+.bonsim-footer {
+  background-color: #000;
+  color: #fff;
+}
+
+.bonsim-footer .logo {
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.footer-link-list a {
+  color: #ffffff;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.footer-link-list a:hover {
+  color: #cccccc;
+}
+
+.active-footer-link {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: default;
+}

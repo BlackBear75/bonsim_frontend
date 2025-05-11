@@ -1,0 +1,77 @@
+.view-orders-container {
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 16px;
+  }
+
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
+
+    tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+  }
+}
+
+.button-show
+{
+  background-color: #000000;
+  color: white;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .modal-content {
+    background: #fff;
+    padding: 24px;
+    border-radius: 16px;
+    width: 60%;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+
+  input, select {
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+}
+.name-search {
+  width: 300px;
+  padding: 8px;
+  font-size: 14px;
+}
