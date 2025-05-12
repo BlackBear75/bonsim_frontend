@@ -11,11 +11,17 @@
       <h3 *ngIf="selectedCategory === 'type'">Список наявних видів товару</h3>
       <h3 *ngIf="selectedCategory === 'print'">Список наявних принтів</h3>
       <ul>
-        <li *ngFor="let item of selectedItems; let i = index" class="category-item">
-          <span>{{ item }}</span>
-          <button (click)="openDeleteModal(i)" class="delete-button">Видалити</button>
+        <li *ngFor="let item of selectedItems" class="category-item">
+          <span *ngIf="isColor(item)">{{ item.colorName }}</span>
+          <span *ngIf="isProductType(item)">{{ item.productTypeName }}</span>
+          <span *ngIf="isPrint(item)">{{ item.printName }}</span>
+
+          <button (click)="openDeleteModal(item.id)" class="delete-button">Видалити</button>
         </li>
       </ul>
+
+
+
     </div>
   </div>
 

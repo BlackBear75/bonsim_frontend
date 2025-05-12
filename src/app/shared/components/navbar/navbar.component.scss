@@ -116,26 +116,51 @@
       padding: 4px 0;
     }
   }
-  .sidebar-tabs {
-    display: flex;
-    justify-content: space-around;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    background: #fff;
+.admin-tab-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  background: #fff;
+}
 
-  }
-  .sidebar-tabs button {
-    background: none;
-    border: none;
-    outline: none;
-    padding: 10px;
-    cursor: pointer;
-    font-weight: bold;
+.admin-tab-button {
+  background: none;
+  border: none;
+  outline: none;
+  font-weight: bold;
+  font-size: 24px !important;
+  padding: 10px 0;
+  cursor: pointer;
+  color: #000;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s;
 
-    &.active {
-      border-bottom: 2px solid black;
-    }
+  &.active {
+    border-bottom: 2px solid black;
   }
+}
+
+.sidebar-tabs {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  background: #fff;
+}
+
+.sidebar-tabs button {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: border-color 0.2s;
+
+  &.active {
+    border-bottom: 2px solid black;
+  }
+}
 
 
   .sidebar-menu li {

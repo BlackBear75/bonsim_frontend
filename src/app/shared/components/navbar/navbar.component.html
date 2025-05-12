@@ -68,11 +68,29 @@
 
   <div class="sidebar-backdrop" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
   <aside class="sidebar" [class.open]="isSidebarOpen">
-    <!-- Таби -->
-    <div class="sidebar-tabs">
-      <button [class.active]="activeTab === 'categories'" (click)="setTab('categories')">Категорії</button>
-      <button [class.active]="activeTab === 'info'" (click)="setTab('info')">Інформація</button>
+    <div *ngIf="userRole === 'Admin'" class="admin-tab-wrapper">
+      <button
+        [class.active]="activeTab === 'admin'"
+        (click)="setTab('admin')"
+        class="admin-tab-button">
+        Адмін панель
+      </button>
     </div>
+
+    <!-- Інші вкладки -->
+    <div class="sidebar-tabs">
+      <button
+        [class.active]="activeTab === 'categories'"
+        (click)="setTab('categories')">
+        Категорії
+      </button>
+      <button
+        [class.active]="activeTab === 'info'"
+        (click)="setTab('info')">
+        Інформація
+      </button>
+    </div>
+
 
     <ul class="sidebar-menu">
       <ng-container *ngIf="activeTab === 'categories'">
@@ -169,6 +187,20 @@
         </li>
 
       </ng-container>
+
+
+
+      <ng-container *ngIf="activeTab === 'admin'">
+        <li><a routerLink="/admin/add-product" (click)="closeSidebar()">Додати продукт</a></li>
+        <li><a routerLink="/admin/add-category" (click)="closeSidebar()">Додати категорію</a></li>
+        <li><a routerLink="/admin/view-orders" (click)="closeSidebar()">Переглянути замовлення</a></li>
+
+        <li><a routerLink="/admin/view-users" (click)="closeSidebar()">Переглянути клієнтів</a></li>
+
+
+      </ng-container>
+
+
 
     </ul>
   </aside>

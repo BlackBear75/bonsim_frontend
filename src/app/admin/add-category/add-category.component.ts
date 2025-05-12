@@ -1,103 +1,172 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
-import { ConfirmDeleteModalComponent } from '../../shared/components/confirm-delete-modal/confirm-delete-modal.component';
 
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDeleteModalComponent } from '../../shared/components/confirm-delete-modal/confirm-delete-modal.component';
+import {CategoryService, Color, Print, ProductType} from '../../core/services/category.service';
+import {FormsModule} from '@angular/forms';
+import {NgForOf, NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
+import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
+
+
+type CategoryItem = Color | ProductType | Print;
 @Component({
   selector: 'app-add-category',
   templateUrl: './add-category.component.html',
   imports: [
+    ConfirmDeleteModalComponent,
     FormsModule,
-    NgForOf,
     NgIf,
-    ConfirmDeleteModalComponent
+    NgForOf
   ],
   styleUrls: ['./add-category.component.scss']
 })
 export class AddCategoryComponent {
   selectedCategory: string = '';
-  selectedItems: string[] = [];
+  selectedItems: CategoryItem[] = [];
   newItem: string = '';
-  itemToDelete: number | null = null;  // Для зберігання індексу елемента, який буде видалено
-  isDeleteModalVisible: boolean = false;  // Для контролю видимості модального вікна
+  itemToDelete: string | null = null;
+  isDeleteModalVisible: boolean = false;
+  isColor(item: CategoryItem): item is Color {
+    return (item as Color).colorName !== undefined;
+  }
 
-  // Списки для кожної категорії
-  colors: string[] = ['Червоний', 'Синій', 'Зелений'];
-  types: string[] = ['Футболка чоловіча', 'Футболка оверсайз унісекс'];
-  prints: string[] = ['Атаки Титанів', 'Логотип компанії'];
+  isProductType(item: CategoryItem): item is ProductType {
+    return (item as ProductType).productTypeName !== undefined;
+  }
 
-  constructor(private dialog: MatDialog) {}
+  isPrint(item: CategoryItem): item is Print {
+    return (item as Print).printName !== undefined;
+  }
 
-  // Вибір категорії
+
+
+  colors: Color[] = [];
+  productTypes: ProductType[] = [];
+  prints: Print[] = [];
+
+  constructor(private categoryService: CategoryService, private dialog: MatDialog) {
+    this.loadCategories();
+  }
+
+  loadCategories() {
+    this.categoryService.getColors().subscribe(colors => {
+      console.log('Colors:', colors);
+      this.colors = colors;
+      if (this.selectedCategory === 'color') {
+        this.updateSelectedItems('color');
+      }
+    });
+
+    this.categoryService.getProductTypes().subscribe(types => {
+      console.log('ProductTypes:', types);
+      this.productTypes = types;
+      if (this.selectedCategory === 'type') {
+        this.updateSelectedItems('type');
+      }
+    });
+
+    this.categoryService.getPrints().subscribe(prints => {
+      console.log('Prints:', prints);
+      this.prints = prints;
+      if (this.selectedCategory === 'print') {
+        this.updateSelectedItems('print');
+      }
+    });
+  }
+
+
   showCategory(category: string) {
     this.selectedCategory = category;
     this.updateSelectedItems(category);
   }
 
-  // Оновлення елементів для вибраної категорії
   updateSelectedItems(category: string) {
     if (category === 'color') {
       this.selectedItems = this.colors;
     } else if (category === 'type') {
-      this.selectedItems = this.types;
+      this.selectedItems = this.productTypes;
     } else if (category === 'print') {
       this.selectedItems = this.prints;
     }
   }
 
-  // Додавання нового елемента
+
+
   openConfirmDialog(itemType: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {}
+      data: { itemType: itemType }  // Передаємо тип елемента для діалогу
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.addNewItem(itemType);
+        this.addNewItem(itemType);  // Додаємо новий елемент, якщо підтверджено
       }
     });
   }
 
-  // Функція для додавання нового елементу в категорію
+
   addNewItem(itemType: string) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found!');
+      return;
+    }
+    console.log(token);
     if (this.newItem.trim()) {
       if (itemType === 'color') {
-        this.colors.push(this.newItem);
+        this.categoryService.addColor(this.newItem).subscribe(color => {
+          this.colors.push(color);
+          this.loadCategories(); // Оновлюємо категорії
+          this.newItem = '';  // Очищуємо поле після додавання
+        });
       } else if (itemType === 'type') {
-        this.types.push(this.newItem);
+        this.categoryService.addProductType(this.newItem).subscribe(type => {
+          this.productTypes.push(type);
+          this.loadCategories(); // Оновлюємо категорії
+          this.newItem = '';  // Очищуємо поле після додавання
+        });
       } else if (itemType === 'print') {
-        this.prints.push(this.newItem);
+        this.categoryService.addPrint(this.newItem).subscribe(print => {
+          this.prints.push(print);
+          this.loadCategories(); // Оновлюємо категорії
+          this.newItem = '';  // Очищуємо поле після додавання
+        });
       }
-      this.newItem = '';  // Очищуємо поле після додавання
+    } else {
+      // Якщо поле порожнє, можна показати повідомлення про помилку
+      alert('Поле не може бути порожнім');
     }
   }
 
-  // Відкриття модального вікна для підтвердження видалення
-  openDeleteModal(index: number) {
-    this.itemToDelete = index;
-    this.isDeleteModalVisible = true; // Відкриваємо модальне вікно
+
+  openDeleteModal(id: string) {
+    this.itemToDelete = id;
+    this.isDeleteModalVisible = true;
   }
 
-  // Підтвердження видалення
   onDeleteConfirmed() {
-    if (this.itemToDelete !== null) {
+    if (this.itemToDelete) {
       if (this.selectedCategory === 'color') {
-        this.colors.splice(this.itemToDelete, 1);
+        this.categoryService.deleteColor(this.itemToDelete).subscribe(() => {
+          this.loadCategories(); // оновити всі
+        });
       } else if (this.selectedCategory === 'type') {
-        this.types.splice(this.itemToDelete, 1);
+        this.categoryService.deleteProductType(this.itemToDelete).subscribe(() => {
+          this.loadCategories();
+        });
       } else if (this.selectedCategory === 'print') {
-        this.prints.splice(this.itemToDelete, 1);
+        this.categoryService.deletePrint(this.itemToDelete).subscribe(() => {
+          this.loadCategories();
+        });
       }
     }
-    this.isDeleteModalVisible = false;  // Закриваємо модальне вікно
-    this.itemToDelete = null;  // Очищаємо індекс елемента, який був видалений
+
+    this.isDeleteModalVisible = false;
+    this.itemToDelete = null;
   }
 
-  // Скасування видалення
   onDeleteCancelled() {
     this.isDeleteModalVisible = false;  // Закриваємо модальне вікно
-    this.itemToDelete = null;  // Очищаємо індекс
+    this.itemToDelete = null;  // Очищаємо id
   }
 }

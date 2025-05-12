@@ -4,18 +4,17 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HostListener } from '@angular/core';
-import {AuthService} from '../../../core/services/auth.service';
-import {Subscription} from 'rxjs';
+import { AuthService } from '../../../core/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   templateUrl: './navbar.component.html',
-  imports: [CommonModule, RouterLink,FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule],
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  constructor(private router: Router,private authService: AuthService) {}
   cartItemCount = 0;
   cartTotalPrice = 1250;
   isSearchOpen = false;
@@ -23,20 +22,20 @@ export class NavbarComponent {
   isNavbarSticky = false;
   isCartOpen = false;
   isSidebarOpen = false;
-  activeTab: 'categories' | 'info' = 'categories';
+  activeTab: 'categories' | 'info' | 'admin' = 'categories';  // Додали вкладку для адмін панелі
   activeSubmenu: 'men' | 'women' | null = null;
-
-
 
   isAuthenticated = false;
   userRole: string | null = null;
 
   private authSub!: Subscription;
 
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.authSub = this.authService.authStatus$.subscribe((status) => {
       this.isAuthenticated = status;
+      console.log(status);
       this.userRole = this.authService.getUserRole();
     });
   }
@@ -48,13 +47,22 @@ export class NavbarComponent {
   ngOnDestroy(): void {
     this.authSub?.unsubscribe();
   }
-  onSearchInput() {
 
+  setTab(tab: 'categories' | 'info' | 'admin') {
+    this.activeTab = tab;
+    this.activeSubmenu = null;
+  }
+
+  isSubmenuOpen(category: string): boolean {
+    return this.activeSubmenu === category;
   }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
     this.activeSubmenu = null;
+  }
+  onSearchInput() {
+
   }
   toggleSearch(): void {
     this.isSearchOpen = !this.isSearchOpen;
@@ -63,35 +71,22 @@ export class NavbarComponent {
   clearSearch() {
     this.searchText = '';
   }
-  setTab(tab: 'categories' | 'info') {
-    this.activeTab = tab;
-    this.activeSubmenu = null;
-  }
-  isSubmenuOpen(category: string): boolean {
-    return this.activeSubmenu === category;
-  }
-
-
-  toggleCart() {
-    this.isCartOpen = !this.isCartOpen;
-  }
 
   goToShop() {
     this.router.navigate(['/shop']);
     this.toggleCart();
   }
 
-
   goToCategory(categoryName: string) {
     this.router.navigate(['/product-category', categoryName]);
   }
-  toggleSubmenu(category: 'men' | 'women'): void {
-    if (this.activeSubmenu === category) {
-      this.activeSubmenu = null;
-    } else {
-      this.activeSubmenu = category;
-    }
+  toggleCart() {
+    this.isCartOpen = !this.isCartOpen;
   }
+  toggleSubmenu(category: 'men' | 'women'): void {
+    this.activeSubmenu = this.activeSubmenu === category ? null : category;
+  }
+
   closeSidebar() {
     this.isSidebarOpen = false;
     this.activeSubmenu = null;
@@ -100,5 +95,4 @@ export class NavbarComponent {
   isActiveLink(link: string): boolean {
     return window.location.pathname.includes(link);
   }
-
 }

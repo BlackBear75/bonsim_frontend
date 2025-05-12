@@ -23,12 +23,15 @@
   &.error {
     background-color: #f44336;
   }
+  &.info{
+    background-color: #4caf50;
+  }
 
   .notification-content {
     display: flex;
     align-items: center;
     gap: 12px;
-    flex: 1; // щоб message займав решту простору
+    flex: 1;
   }
 
   .icon {

@@ -3,6 +3,7 @@
     <ng-container [ngSwitch]="type">
       <img *ngSwitchCase="'success'" src="assets/img/icon-check.png" alt="Success">
       <img *ngSwitchCase="'error'" src="assets/img/icon-cross-mark.png" alt="Error">
+      <img *ngSwitchCase="'info'" src="assets/img/icon-check.png" alt="Info">
     </ng-container>
   </div>
   <div class="message">{{ message }}</div>

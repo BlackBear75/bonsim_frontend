@@ -18,11 +18,10 @@ import {AddProductComponent} from './admin/add-product/add-product.component';
 import {AddCategoryComponent} from './admin/add-category/add-category.component';
 import {ViewUsersComponent} from './admin/view-users/view-users.component';
 import {ViewOrdersComponent} from './admin/view-orders/view-orders.component';
+import {AdminGuard} from './guards/admin.guard';
 
 
 export const routes: Routes = [
-
-
 
   { path: '', component: IndexComponent },
   { path: 'profile', component: ProfilePageComponent,  children: [
@@ -46,14 +45,27 @@ export const routes: Routes = [
   { path: 'product-category/:category', component: ProductCategoryComponent },
   { path: 'product', component: ProductComponent },
 
+  {
+    path: 'admin/add-product',
+    component: AddProductComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'admin/add-category',
+    component: AddCategoryComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'admin/view-users',
+    component: ViewUsersComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'admin/view-orders',
+    component: ViewOrdersComponent,
+    canActivate: [AdminGuard],
+  },
 
-
-  { path: 'add-product', component: AddProductComponent },
-
-  { path: 'add-category', component: AddCategoryComponent },
-
-  { path: 'view-users', component: ViewUsersComponent },
-  { path: 'view-orders', component: ViewOrdersComponent },
 
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' },

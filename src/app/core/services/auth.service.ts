@@ -25,7 +25,8 @@ export class AuthService {
       tap((response: any) => {
         if (response?.token) {
           localStorage.setItem('token', response.token);
-          this.authStatusSubject.next(true); // 🔁 повідомляємо про зміну
+          console.log('Token saved:', localStorage.getItem('token'));
+          this.authStatusSubject.next(true);
           this.notificationService.showSuccess(response.message || 'Успішний вхід');
           this.router.navigate(['/']);
         }
@@ -38,7 +39,8 @@ export class AuthService {
       tap((response) => {
         if (response?.token) {
           localStorage.setItem('token', response.token);
-          this.authStatusSubject.next(true); // Повідомляємо про зміну статусу
+
+          this.authStatusSubject.next(true);
           this.notificationService.showSuccess(response.message || 'Успішна реєстрація');
           this.router.navigate(['/']);
         }
@@ -48,7 +50,8 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
-    this.authStatusSubject.next(false); // 🔁 повідомляємо про зміну
+    this.authStatusSubject.next(false);
+    this.notificationService.showInfo('Успішний вихід з аккаунту');
     this.router.navigate(['/']);
   }
 
@@ -58,7 +61,10 @@ export class AuthService {
 
   getUserRole(): string | null {
     const token = localStorage.getItem('token');
-    if (!token) return null;
+    if (!token) {
+      console.log(token);
+      return null;
+    }
     const decoded = this.decodeJwt(token);
     return decoded?.role || null;
   }
