@@ -19,6 +19,7 @@ import {AddCategoryComponent} from './admin/add-category/add-category.component'
 import {ViewUsersComponent} from './admin/view-users/view-users.component';
 import {ViewOrdersComponent} from './admin/view-orders/view-orders.component';
 import {AdminGuard} from './guards/admin.guard';
+import {ViewsProductsComponent} from './admin/views-products/views-products.component';
 
 
 export const routes: Routes = [
@@ -65,7 +66,11 @@ export const routes: Routes = [
     component: ViewOrdersComponent,
     canActivate: [AdminGuard],
   },
-
+  {
+    path: 'admin/views-products',
+    component: ViewsProductsComponent,
+    canActivate: [AdminGuard],
+  },
 
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' },

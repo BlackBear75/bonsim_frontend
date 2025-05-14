@@ -1,101 +1,94 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { CategoryService } from '../../core/services/category.service'; // Шлях онови за потреби
+import { Color, ProductType, Print } from '../../core/models/category-models';
+import {NgForOf, NgIf} from '@angular/common';
+import {ProductService} from '../../core/services/product.service';
 
+export type { Color, ProductType, Print };
 @Component({
   selector: 'app-add-product',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './add-product.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgForOf,
+    NgIf
+  ],
   styleUrls: ['./add-product.component.scss']
 })
-export class AddProductComponent {
+export class AddProductComponent implements OnInit {
   productForm: FormGroup;
   imagesPreview: string[] = [];
   selectedFiles: File[] = [];
   imageError: string = '';
 
-  productTypes: string[] = [
-    'Футболка чоловіча',
-    'Футболка оверсайз унісекс',
-    'Худі жіноче',
-    'Худі чоловіче',
-    'Штани спортивні',
-    'Шорти',
-    'Кофта з капюшоном',
-    'Світшот унісекс',
-    'Майка',
-    'Кроп-топ'
-  ];
+  productTypes: ProductType[] = [];
+  colors: Color[] = [];
+  prints: Print[] = [];
 
-  colors: string[] = [
-    'Black', 'White', 'Red', 'Blue', 'Green',
-    'Yellow', 'Orange', 'Pink', 'Grey', 'Beige'
-  ];
-
-  prints: string[] = [
-    'Attack on Titan',
-    'Naruto',
-    'One Piece',
-    'Chainsaw Man',
-    'Demon Slayer',
-    'Jujutsu Kaisen',
-    'Dragon Ball',
-    'Bleach',
-    'Tokyo Ghoul',
-    'Death Note'
-  ];
-
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private categoryService: CategoryService, private productService: ProductService) {
     this.productForm = this.fb.group({
       type: ['', Validators.required],
       color: ['', Validators.required],
-      print: ['', Validators.required]
+      print: ['', Validators.required],
+      price: [null, [Validators.required, Validators.min(0.01)]]
     });
+
+  }
+
+  ngOnInit(): void {
+    this.categoryService.getProductTypes().subscribe(types => this.productTypes = types);
+    this.categoryService.getColors().subscribe(colors => this.colors = colors);
+    this.categoryService.getPrints().subscribe(prints => this.prints = prints);
   }
 
   onFileChange(event: any) {
     const files: FileList = event.target.files;
 
-    // Якщо загальна кількість перевищує 5
     if (this.selectedFiles.length + files.length > 5) {
       this.imageError = 'Можна завантажити не більше 5 фото';
       event.target.value = '';
       return;
     }
 
-    this.imageError = ''; // очищаємо попередню помилку
+    this.imageError = '';
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       this.selectedFiles.push(file);
 
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagesPreview.push(e.target.result);
-      };
+      reader.onload = (e: any) => this.imagesPreview.push(e.target.result);
       reader.readAsDataURL(file);
     }
 
     event.target.value = '';
   }
 
-
   onSubmit(fileInput: HTMLInputElement) {
-    if (this.productForm.valid) {
-      const formValue = this.productForm.value;
-      const finalName = `${formValue.type} ${formValue.print} (${formValue.color})`;
+    if (this.productForm.valid && this.selectedFiles.length > 0) {
+      const {type, color, print, price} = this.productForm.value;
 
-      console.log('Формований заголовок товару:', finalName);
-      console.log('Файли:', this.selectedFiles);
+      const formData = new FormData();
+      formData.append('typeId', type.id);
+      formData.append('colorId', color.id);
+      formData.append('printId', print.id);
+      formData.append('price', price.toString());
 
-      // TODO: Надсилання на сервер
+      this.selectedFiles.forEach(file => formData.append('images', file));
 
-      this.productForm.reset();
-      this.imagesPreview = [];
-      this.selectedFiles = [];
-      fileInput.value = '';
+      this.productService.addProduct(formData).subscribe({
+        next: (res) => {
+          console.log('Успішно додано товар:', res);
+          this.productForm.reset();
+          this.imagesPreview = [];
+          this.selectedFiles = [];
+          fileInput.value = '';
+        },
+        error: (err) => {
+          console.error('Помилка при додаванні товару:', err);
+        }
+      });
     }
   }
 }

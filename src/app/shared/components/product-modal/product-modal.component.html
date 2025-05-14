@@ -1,0 +1,35 @@
+<div class="large-image-backdrop" *ngIf="largeImage" (click)="closeLargeImage()">
+  <div class="large-image-content" (click)="$event.stopPropagation()">
+    <img [src]="largeImage" alt="Велике зображення" class="large-image" />
+    <button class="close-btn" (click)="closeLargeImage()">✖</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" *ngIf="isVisible">
+  <div class="modal-content" (click)="$event.stopPropagation()"> <!-- Зміни тут -->
+    <h2>{{ product?.name }}</h2>
+    <p><strong>Ціна:</strong> {{ product?.price }}₴</p>
+    <p><strong>Тип:</strong> {{ product?.productType }}</p>
+    <p><strong>Принт:</strong> {{ product?.print }}</p>
+    <p><strong>Колір:</strong> {{ product?.color }}</p>
+    <p><strong>Дата додавання:</strong> {{ product?.createdAt | date }}</p>
+
+    <p><strong>Фото продукта:</strong></p>
+    <div *ngIf="product?.images?.length">
+      <img *ngFor="let image of product?.images" [src]="image" alt="{{ product?.name }}"
+           class="modal-image" (click)="openLargeImage(image)" />
+    </div>
+    <div class="actions">
+      <button class="close" (click)="closeModal()">Закрити</button>
+      <button class="delete" (click)="openConfirmModal()">Видалити</button>
+    </div>
+
+    <!-- Підтвердження видалення -->
+    <app-confirm-delete-modal
+      *ngIf="isConfirmVisible"
+      [isVisible]="isConfirmVisible"
+      (confirm)="handleConfirm()"
+      (cancel)="handleCancel()"
+    />
+  </div>
+</div>

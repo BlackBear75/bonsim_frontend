@@ -5,7 +5,7 @@
       <label for="type">Вид товару</label>
       <select id="type" formControlName="type">
         <option value="" disabled selected>Оберіть тип</option>
-        <option *ngFor="let type of productTypes" [value]="type">{{ type }}</option>
+        <option *ngFor="let type of productTypes" [ngValue]="type">{{ type.productTypeName }}</option>
       </select>
     </div>
 
@@ -13,7 +13,7 @@
       <label for="print">Принт</label>
       <select id="print" formControlName="print">
         <option value="" disabled selected>Оберіть принт</option>
-        <option *ngFor="let print of prints" [value]="print">{{ print }}</option>
+        <option *ngFor="let print of prints" [ngValue]="print">{{ print.printName }}</option>
       </select>
     </div>
 
@@ -21,8 +21,12 @@
       <label for="color">Колір</label>
       <select id="color" formControlName="color">
         <option value="" disabled selected>Оберіть колір</option>
-        <option *ngFor="let color of colors" [value]="color">{{ color }}</option>
+        <option *ngFor="let color of colors" [ngValue]="color">{{ color.colorName }}</option>
       </select>
+    </div>
+    <div class="form-group">
+      <label for="price">Ціна (грн)</label>
+      <input id="price" type="number" formControlName="price" min="0.01" step="0.01" />
     </div>
 
     <div class="form-group">

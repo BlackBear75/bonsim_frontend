@@ -4,6 +4,10 @@ import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { NotificationService } from './notification.service';
+import {ServerResponse} from '../models/server-response.model';
+import {AuthResponse} from '../models/auth-responce.model';
+
+export type { ServerResponse };
 
 @Injectable({
   providedIn: 'root',
@@ -20,11 +24,11 @@ export class AuthService {
     private notificationService: NotificationService
   ) {}
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap((response: any) => {
-        if (response?.token) {
-          localStorage.setItem('token', response.token);
+  login(email: string, password: string): Observable<ServerResponse<AuthResponse>> {
+    return this.http.post<ServerResponse<AuthResponse>>(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap((response) => {
+        if (response?.data?.token) {
+          localStorage.setItem('token', response.data.token);
           console.log('Token saved:', localStorage.getItem('token'));
           this.authStatusSubject.next(true);
           this.notificationService.showSuccess(response.message || 'Успішний вхід');
@@ -33,13 +37,13 @@ export class AuthService {
       })
     );
   }
-  register(firstName: string, lastName: string, email: string, password: string): Observable<any> {
-    const body = { email, password, firstName, lastName };
-    return this.http.post<any>(`${this.apiUrl}/register`, body).pipe(
-      tap((response) => {
-        if (response?.token) {
-          localStorage.setItem('token', response.token);
 
+  register(firstName: string, lastName: string, email: string, password: string): Observable<ServerResponse<AuthResponse>> {
+    const body = { email, password, firstName, lastName };
+    return this.http.post<ServerResponse<AuthResponse>>(`${this.apiUrl}/register`, body).pipe(
+      tap((response) => {
+        if (response?.data?.token) {
+          localStorage.setItem('token', response.data.token);
           this.authStatusSubject.next(true);
           this.notificationService.showSuccess(response.message || 'Успішна реєстрація');
           this.router.navigate(['/']);
@@ -62,7 +66,6 @@ export class AuthService {
   getUserRole(): string | null {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.log(token);
       return null;
     }
     const decoded = this.decodeJwt(token);

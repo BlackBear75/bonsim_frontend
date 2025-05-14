@@ -50,7 +50,6 @@ export class AddCategoryComponent {
 
   loadCategories() {
     this.categoryService.getColors().subscribe(colors => {
-      console.log('Colors:', colors);
       this.colors = colors;
       if (this.selectedCategory === 'color') {
         this.updateSelectedItems('color');
@@ -58,7 +57,6 @@ export class AddCategoryComponent {
     });
 
     this.categoryService.getProductTypes().subscribe(types => {
-      console.log('ProductTypes:', types);
       this.productTypes = types;
       if (this.selectedCategory === 'type') {
         this.updateSelectedItems('type');
@@ -66,7 +64,6 @@ export class AddCategoryComponent {
     });
 
     this.categoryService.getPrints().subscribe(prints => {
-      console.log('Prints:', prints);
       this.prints = prints;
       if (this.selectedCategory === 'print') {
         this.updateSelectedItems('print');
@@ -94,12 +91,12 @@ export class AddCategoryComponent {
 
   openConfirmDialog(itemType: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: { itemType: itemType }  // Передаємо тип елемента для діалогу
+      data: { itemType: itemType }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.addNewItem(itemType);  // Додаємо новий елемент, якщо підтверджено
+        this.addNewItem(itemType);
       }
     });
   }
@@ -116,24 +113,23 @@ export class AddCategoryComponent {
       if (itemType === 'color') {
         this.categoryService.addColor(this.newItem).subscribe(color => {
           this.colors.push(color);
-          this.loadCategories(); // Оновлюємо категорії
-          this.newItem = '';  // Очищуємо поле після додавання
+          this.loadCategories();
+          this.newItem = '';
         });
       } else if (itemType === 'type') {
         this.categoryService.addProductType(this.newItem).subscribe(type => {
           this.productTypes.push(type);
-          this.loadCategories(); // Оновлюємо категорії
-          this.newItem = '';  // Очищуємо поле після додавання
+          this.loadCategories();
+          this.newItem = '';
         });
       } else if (itemType === 'print') {
         this.categoryService.addPrint(this.newItem).subscribe(print => {
           this.prints.push(print);
-          this.loadCategories(); // Оновлюємо категорії
-          this.newItem = '';  // Очищуємо поле після додавання
+          this.loadCategories();
+          this.newItem = '';
         });
       }
     } else {
-      // Якщо поле порожнє, можна показати повідомлення про помилку
       alert('Поле не може бути порожнім');
     }
   }
@@ -148,7 +144,7 @@ export class AddCategoryComponent {
     if (this.itemToDelete) {
       if (this.selectedCategory === 'color') {
         this.categoryService.deleteColor(this.itemToDelete).subscribe(() => {
-          this.loadCategories(); // оновити всі
+          this.loadCategories();
         });
       } else if (this.selectedCategory === 'type') {
         this.categoryService.deleteProductType(this.itemToDelete).subscribe(() => {
@@ -166,7 +162,7 @@ export class AddCategoryComponent {
   }
 
   onDeleteCancelled() {
-    this.isDeleteModalVisible = false;  // Закриваємо модальне вікно
-    this.itemToDelete = null;  // Очищаємо id
+    this.isDeleteModalVisible = false;
+    this.itemToDelete = null;
   }
 }

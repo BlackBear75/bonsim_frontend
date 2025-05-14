@@ -1,89 +1,82 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { catchError } from 'rxjs/operators';
-import {NotificationService} from './notification.service';
-import { Color, ProductType, Print } from '../models/CategoryModels';
+import { catchError, map } from 'rxjs/operators';
+import { NotificationService } from './notification.service';
+import { Color, ProductType, Print } from '../models/category-models';
+import { ServerResponse } from '../models/server-response.model';
+import {ErrorHandlerService} from './error-handler.service';
 
 export type { Color, ProductType, Print };
+export type { ServerResponse };
+
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
   private baseUrl = `${environment.apiUrl}/category`;
 
-  constructor(private http: HttpClient, private notificationService: NotificationService) {}
+  constructor(private http: HttpClient, private notificationService: NotificationService,private errorHandler: ErrorHandlerService) {}
 
-  // Colors
   getColors(): Observable<Color[]> {
-    return this.http.get<Color[]>(`${this.baseUrl}/colors`).pipe(
-      catchError(error => this.handleError(error))
+    return this.http.get<ServerResponse<Color[]>>(`${this.baseUrl}/colors`).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
     );
   }
 
   addColor(name: string): Observable<Color> {
-    return this.http.post<Color>(`${this.baseUrl}/colors`, { name }).pipe(
-      catchError(error => this.handleError(error))
+    return this.http.post<ServerResponse<Color>>(`${this.baseUrl}/colors`, { name }).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
     );
   }
 
-  deleteColor(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/colors/${id}`).pipe(
-      catchError(error => this.handleError(error))
+  deleteColor(id: string): Observable<boolean> {
+    return this.http.delete<ServerResponse<boolean>>(`${this.baseUrl}/colors/${id}`).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
     );
   }
 
-  // Product types
   getProductTypes(): Observable<ProductType[]> {
-    return this.http.get<ProductType[]>(`${this.baseUrl}/product-types`).pipe(
-      catchError(error => this.handleError(error))
+    return this.http.get<ServerResponse<ProductType[]>>(`${this.baseUrl}/product-types`).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
     );
   }
 
   addProductType(name: string): Observable<ProductType> {
-    return this.http.post<ProductType>(`${this.baseUrl}/product-types`, { name }).pipe(
-      catchError(error => this.handleError(error))
+    return this.http.post<ServerResponse<ProductType>>(`${this.baseUrl}/product-types`, { name }).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
     );
   }
 
-  deleteProductType(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/product-types/${id}`).pipe(
-      catchError(error => this.handleError(error))
+  deleteProductType(id: string): Observable<boolean> {
+    return this.http.delete<ServerResponse<boolean>>(`${this.baseUrl}/product-types/${id}`).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
     );
   }
 
-  // Prints
   getPrints(): Observable<Print[]> {
-    return this.http.get<Print[]>(`${this.baseUrl}/prints`).pipe(
-      catchError(error => this.handleError(error))
+    return this.http.get<ServerResponse<Print[]>>(`${this.baseUrl}/prints`).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
     );
   }
 
   addPrint(name: string): Observable<Print> {
-    return this.http.post<Print>(`${this.baseUrl}/prints`, { name }).pipe(
-      catchError(error => this.handleError(error))
+    return this.http.post<ServerResponse<Print>>(`${this.baseUrl}/prints`, { name }).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
     );
   }
 
-  deletePrint(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/prints/${id}`).pipe(
-      catchError(error => this.handleError(error))
+  deletePrint(id: string): Observable<boolean> {
+    return this.http.delete<ServerResponse<boolean>>(`${this.baseUrl}/prints/${id}`).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
     );
-  }
-
-  private handleError(error: any): Observable<never> {
-    let message = 'Щось пішло не так!';
-
-    if (error.error && error.error.message) {
-      message = error.error.message;
-    } else if (error.status === 0) {
-      message = 'Немає з\'єднання з сервером!';
-    } else if (error.status === 404) {
-      message = 'Не знайдено ресурс!';
-    } else if (error.status === 500) {
-      message = 'Внутрішня помилка сервера!';
-    }
-
-    this.notificationService.showError(message);
-    return throwError(() => new Error(message));
   }
 }

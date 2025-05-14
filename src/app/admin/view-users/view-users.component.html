@@ -18,6 +18,8 @@
       <th>Прізвище</th>
       <th>Телефон</th>
       <th>Пошта</th>
+
+      <th>Роль</th>
       <th>Дії</th>
     </tr>
     </thead>
@@ -26,15 +28,15 @@
       <td>{{ i + 1 }}</td>
       <td>{{ user.firstName }}</td>
       <td>{{ user.lastName }}</td>
-      <td>{{ user.phone }}</td>
+      <td>{{ user.phoneNumber }}</td>
       <td>{{ user.email }}</td>
+      <td>{{ user.role }}</td>
       <td><button (click)="selectUser(user)">Показати</button></td>
     </tr>
     </tbody>
   </table>
 </div>
 
-<!-- Модальне вікно -->
 <div class="modal-backdrop" *ngIf="selectedUser">
   <div class="modal-content">
     <user-details

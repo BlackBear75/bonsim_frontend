@@ -191,10 +191,12 @@
 
 
       <ng-container *ngIf="activeTab === 'admin'">
+
         <li><a routerLink="/admin/add-product" (click)="closeSidebar()">Додати продукт</a></li>
         <li><a routerLink="/admin/add-category" (click)="closeSidebar()">Додати категорію</a></li>
         <li><a routerLink="/admin/view-orders" (click)="closeSidebar()">Переглянути замовлення</a></li>
 
+        <li><a routerLink="/admin/views-products" (click)="closeSidebar()">Переглянути товари</a></li>
         <li><a routerLink="/admin/view-users" (click)="closeSidebar()">Переглянути клієнтів</a></li>
 
 

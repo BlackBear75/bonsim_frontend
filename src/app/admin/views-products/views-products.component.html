@@ -1,0 +1,62 @@
+<div class="product-table-container">
+  <h2>Список продуктів</h2>
+  <div class="filter-container">
+    <input type="text" placeholder="Пошук за назвою" [(ngModel)]="filter.name" />
+
+    <div class="select-container">
+      <select [(ngModel)]="filter.productType">
+        <option value="">Усі типи</option>
+        <option *ngFor="let type of productTypes" [value]="type.productTypeName">{{ type.productTypeName }}</option>
+      </select>
+    </div>
+
+    <div class="select-container">
+      <select [(ngModel)]="filter.color">
+        <option value="">Усі кольори</option>
+        <option *ngFor="let color of colors" [value]="color.colorName">{{ color.colorName }}</option>
+      </select>
+    </div>
+
+    <div class="select-container">
+      <select [(ngModel)]="filter.print">
+        <option value="">Усі принти</option>
+        <option *ngFor="let print of prints" [value]="print.printName">{{ print.printName }}</option>
+      </select>
+    </div>
+
+    <button (click)="applyFilters()">Фільтрувати</button>
+    <button (click)="resetFilters()">Скинути</button>
+  </div>
+
+
+  <table>
+    <thead>
+    <tr>
+      <th>Назва</th>
+      <th>Колір</th>
+      <th>Тип</th>
+      <th>Принт</th>
+      <th>Ціна</th>
+      <th>Дії</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let product of filteredProducts">
+
+      <td>{{ product.name }}</td>
+      <td>{{ product.color }}</td>
+      <td>{{ product.productType }}</td>
+      <td>{{ product.print }}</td>
+      <td>{{ product.price }}₴</td>
+      <td><button (click)="openModal(product)">Переглянути</button></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-product-modal
+  [isVisible]="showModal"
+  [product]="selectedProduct"
+  (close)="closeModal()"
+  (deleteProduct)="deleteProduct($event)">
+</app-product-modal>

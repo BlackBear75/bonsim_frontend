@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserDetailsComponent} from '../../shared/components/user-details/user-details.component';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
+import {UserService} from '../../core/services/user.service';
+import { Client } from '../../core/models/client.model';
 
 @Component({
   selector: 'view-users',
@@ -14,28 +16,11 @@ import {NgForOf, NgIf} from '@angular/common';
   ],
   styleUrls: ['./view-users.component.scss']
 })
-export class ViewUsersComponent {
-  users = [
-    {
-      firstName: 'Олександр',
-      lastName: 'Петренко',
-      phone: '+380501112233',
-      email: 'oleksandr@example.com',
-      totalSpent: 1500,
-      orders: [{ date: '2024-05-01', amount: 750 }]
-    },
-    {
-      firstName: 'Марія',
-      lastName: 'Ковальчук',
-      phone: '+380631234567',
-      email: 'maria@example.com',
-      totalSpent: 2800,
-      orders: [{ date: '2024-04-25', amount: 1400 }]
-    }
-    // додай ще користувачів
-  ];
+export class ViewUsersComponent implements OnInit {
+  constructor(private userService: UserService) {}
 
-  filteredUsers = [...this.users];
+  users: Client[] = [];
+  filteredUsers: Client[] = [];
 
   filter = {
     firstName: '',
@@ -43,24 +28,49 @@ export class ViewUsersComponent {
     email: ''
   };
 
-  selectedUser: any = null;
+  selectedUser: Client | null = null;
 
-  selectUser(user: any) {
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  loadUsers(): void {
+    this.userService.getAllUsers().subscribe({
+      next: (data) => {
+        this.users = data;
+        this.filteredUsers = [...this.users];
+      },
+      error: (err) => {
+        console.error('Помилка при завантаженні користувачів:', err);
+      }
+    });
+  }
+
+
+  selectUser(user: Client) {
     this.selectedUser = user;
   }
 
-  handleUserDelete(user: any) {
-    this.users = this.users.filter(u => u !== user);
-    this.applyFilter(); // оновити відфільтрований список
+  handleUserDelete(user: Client) {
+    if (!user.id) return;
+
+    this.userService.deleteUser(user.id).subscribe({
+      next: () => {
+        this.users = this.users.filter(u => u.id !== user.id);
+        this.applyFilter();
+      },
+      error: (err) => {
+        console.error('Помилка при видаленні користувача:', err);
+      }
+    });
   }
 
   applyFilter() {
     const { firstName, lastName, email } = this.filter;
-
     this.filteredUsers = this.users.filter(user =>
-      (!firstName || user.firstName.toLowerCase().includes(firstName.toLowerCase())) &&
-      (!lastName || user.lastName.toLowerCase().includes(lastName.toLowerCase())) &&
-      (!email || user.email.toLowerCase().includes(email.toLowerCase()))
+      (!firstName || user.firstName?.toLowerCase().includes(firstName.toLowerCase())) &&
+      (!lastName || user.lastName?.toLowerCase().includes(lastName.toLowerCase())) &&
+      (!email || user.email?.toLowerCase().includes(email.toLowerCase()))
     );
   }
 
