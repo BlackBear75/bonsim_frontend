@@ -32,7 +32,7 @@
 
   <div class="product-info">
     <h1 class="product-title">{{ product.name }}</h1>
-    <p class="price">{{ product.price }} грн</p>
+    <p class="price">{{ currentPrice  }} грн</p>
 
     <div class="size-selection">
       <div class="size-header">
@@ -50,6 +50,7 @@
           </button>
         </div>
 
+
         <button class="add-to-cart" (click)="addToCart()">Додати в кошик</button>
       </div>
     </div>
@@ -57,12 +58,11 @@
       <h2 class="colors-title">Кольори:</h2>
 
       <div class="carousel-container">
-        <!-- Стрілки завжди в DOM -->
         <button class="arrow left" (click)="scrollLeft()">‹</button>
 
-        <div class="color-variants" #carousel>
+        <div class="color-variants" #carousel *ngIf="colorVariants.length > 0">
           <app-product-card
-            *ngFor="let variant of product.colorVariants"
+            *ngFor="let variant of colorVariants"
             [product]="variant">
           </app-product-card>
         </div>
@@ -84,16 +84,20 @@
 
       <div [class.active]="activeTab === 'description'" class="tab-description">
         <h2>Опис товару</h2>
-        <p>{{ product.description }}</p>
+
         <h3>Матеріал:</h3>
-        <p>{{ product.material }}</p>
+        <p *ngFor="let line of getLines(product?.material)">{{ line }}</p>
+
         <h3>Деталі та крій:</h3>
-        <p>{{ product.detailsAndCut }}</p>
+        <p *ngFor="let line of getLines(product?.fitDetails)">{{ line }}</p>
+
         <h3>Догляд:</h3>
-        <p>{{ product.care }}</p>
+        <p *ngFor="let line of getLines(product?.care)">{{ line }}</p>
+
         <h3>На фото:</h3>
-        <p>{{ product.onModel }}</p>
+        <p *ngFor="let line of getLines(product?.modelInfo)">{{ line }}</p>
       </div>
+
 
       <div [class.active]="activeTab === 'paymentAndDelivery'" class="tab-payment-delivery">
         <h2>Оплата та Доставка</h2>

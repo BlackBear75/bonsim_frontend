@@ -25,6 +25,21 @@
       </select>
     </div>
     <div class="form-group">
+      <label for="gender">Гендер</label>
+      <select id="gender" formControlName="gender">
+        <option value="" disabled selected>Оберіть гендер</option>
+        <option *ngFor="let gender of genders" [value]="gender">{{ gender }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="monthlyEvent">Місячний івент (необов’язково)</label>
+      <select id="monthlyEvent" formControlName="monthlyEvent">
+        <option [ngValue]="null">Без івенту</option>
+        <option *ngFor="let event of monthlyEvents" [ngValue]="event">{{ event.name }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
       <label for="price">Ціна (грн)</label>
       <input id="price" type="number" formControlName="price" min="0.01" step="0.01" />
     </div>

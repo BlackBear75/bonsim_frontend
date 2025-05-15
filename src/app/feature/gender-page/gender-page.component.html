@@ -11,11 +11,15 @@
   <h2>Популярні категорії</h2>
   <div class="categories-container">
     <div class="category-card" *ngFor="let category of categories">
-      <div class="category-image" [ngStyle]="{ 'background-image': 'url(' + category.imageUrl + ')' }"></div>
-      <h3>{{ category.name }}</h3>
+
+        <div class="category-image" [ngStyle]="{ 'background-image': 'url(' + category.imageUrl + ')' }"></div>
+      <a [routerLink]="['/product-category', category.name.toLowerCase()]">
+        <h3>{{ category.name }}</h3>
+      </a>
     </div>
   </div>
 </div>
+
 <div class="products">
   <h2>Популярні товари</h2>
   <div class="products-container">

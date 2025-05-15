@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { CategoryService } from '../../core/services/category.service'; // Шлях онови за потреби
-import { Color, ProductType, Print } from '../../core/models/category-models';
+import {Color, ProductType, Print, MonthlyEvent} from '../../core/models/category-models';
 import {NgForOf, NgIf} from '@angular/common';
 import {ProductService} from '../../core/services/product.service';
 
@@ -21,6 +21,8 @@ export class AddProductComponent implements OnInit {
   imagesPreview: string[] = [];
   selectedFiles: File[] = [];
   imageError: string = '';
+  genders: string[] = ['Men', 'Women', 'Unisex'];
+  monthlyEvents: MonthlyEvent[] = [];
 
   productTypes: ProductType[] = [];
   colors: Color[] = [];
@@ -31,7 +33,9 @@ export class AddProductComponent implements OnInit {
       type: ['', Validators.required],
       color: ['', Validators.required],
       print: ['', Validators.required],
-      price: [null, [Validators.required, Validators.min(0.01)]]
+      gender: ['', Validators.required],
+      price: [null, [Validators.required, Validators.min(0.01)]],
+      monthlyEvent: [null]
     });
 
   }
@@ -40,6 +44,7 @@ export class AddProductComponent implements OnInit {
     this.categoryService.getProductTypes().subscribe(types => this.productTypes = types);
     this.categoryService.getColors().subscribe(colors => this.colors = colors);
     this.categoryService.getPrints().subscribe(prints => this.prints = prints);
+    this.categoryService.getMonthlyEvents().subscribe(events => this.monthlyEvents = events);
   }
 
   onFileChange(event: any) {
@@ -67,14 +72,17 @@ export class AddProductComponent implements OnInit {
 
   onSubmit(fileInput: HTMLInputElement) {
     if (this.productForm.valid && this.selectedFiles.length > 0) {
-      const {type, color, print, price} = this.productForm.value;
+      const {type, color, print,gender, price,monthlyEvent} = this.productForm.value;
 
       const formData = new FormData();
       formData.append('typeId', type.id);
       formData.append('colorId', color.id);
       formData.append('printId', print.id);
+      formData.append('gender', gender);
       formData.append('price', price.toString());
-
+      if (monthlyEvent) {
+        formData.append('monthlyEventId', monthlyEvent.id);
+      }
       this.selectedFiles.forEach(file => formData.append('images', file));
 
       this.productService.addProduct(formData).subscribe({
@@ -83,6 +91,7 @@ export class AddProductComponent implements OnInit {
           this.productForm.reset();
           this.imagesPreview = [];
           this.selectedFiles = [];
+
           fileInput.value = '';
         },
         error: (err) => {

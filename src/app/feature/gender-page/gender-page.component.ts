@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {CommonModule, NgStyle} from '@angular/common';
 import {ProductCardComponent} from '../../shared/components/product-card/product-card.component';
+import {ProductService} from '../../core/services/product.service';
 
 @Component({
   selector: 'app-gender-page',
@@ -9,7 +10,8 @@ import {ProductCardComponent} from '../../shared/components/product-card/product
   imports: [
     NgStyle,
     CommonModule,
-    ProductCardComponent
+    ProductCardComponent,
+    RouterLink
   ],
   styleUrls: ['./gender-page.component.scss']
 })
@@ -17,35 +19,40 @@ export class GenderPageComponent implements OnInit {
   gender: string = '';
   imageUrl: string = '';
   categories = [
-    { name: 'Худі', imageUrl: '/assets/img/shop_10.jpg' },
+    { name: 'лонгсліви', imageUrl: '/assets/img/shop_10.jpg' },
     { name: 'Футболки', imageUrl: '/assets/img/shop_10.jpg' },
     { name: 'Штани', imageUrl: '/assets/img/shop_10.jpg' },
     { name: 'Сорочки', imageUrl: '/assets/img/shop_10.jpg' },
     { name: 'Куртки', imageUrl: '/assets/img/shop_10.jpg' },
     { name: 'Аксесуари', imageUrl: '/assets/img/shop_10.jpg' }
   ];
-  popularProducts = [
-    { name: 'Худі', price: 1200, imageUrl: '/assets/img/banner_img_01.jpg' },
-    { name: 'Футболка', price: 800, imageUrl: '/assets/img/banner_img_01.jpg' },
-    { name: 'Штани', price: 1500, imageUrl: '/assets/img/banner_img_01.jpg' },
-    { name: 'Куртка', price: 2500, imageUrl: '/assets/img/banner_img_01.jpg' }
-  ];
-  newProducts = [
-    { name: 'Худі', price: 1200, imageUrl: '/assets/img/banner_img_01.jpg' },
-    { name: 'Футболка', price: 800, imageUrl: '/assets/img/banner_img_01.jpg' },
-    { name: 'Штани', price: 1500, imageUrl: '/assets/img/banner_img_01.jpg' },
-    { name: 'Куртка', price: 2500, imageUrl: '/assets/img/banner_img_01.jpg' },
-    { name: 'Куртка', price: 2500, imageUrl: '/assets/img/banner_img_01.jpg' },
-  ];
 
-  constructor(private route: ActivatedRoute) {}
+  popularProducts: any[] = [];
+  newProducts: any[] = [];
+  constructor(private route: ActivatedRoute,  private productService: ProductService) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const gender = this.route.snapshot.data['gender'];
+    this.route.data.subscribe(data => {
+      this.gender = data['gender'] || '';
+      console.log(this.gender);
       this.setImageUrl();
+      this.loadProducts();
     });
   }
+
+  loadProducts() {
+    console.log(this.gender)
+    this.productService.getPopularProducts().subscribe(products => {
+      this.popularProducts = products;
+    });
+
+
+    this.productService.getNewBuGenderProducts(this.gender).subscribe(products => {
+      this.newProducts = products;
+    });
+
+  }
+
 
   setImageUrl() {
     if (this.gender === 'men') {

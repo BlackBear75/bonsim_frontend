@@ -43,8 +43,12 @@ export const routes: Routes = [
   { path: 'w', component: GenderPageComponent, data: { gender: 'women' } },
   { path: 'm', component: GenderPageComponent, data: { gender: 'men' } },
 
-  { path: 'product-category/:category', component: ProductCategoryComponent },
-  { path: 'product', component: ProductComponent },
+  {
+    path: 'product-category/:gender/:productType',
+    component: ProductCategoryComponent
+  },
+
+  {   path: 'product/:id', component: ProductComponent },
 
   {
     path: 'admin/add-product',

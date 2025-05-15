@@ -4,11 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDeleteModalComponent } from '../../shared/components/confirm-delete-modal/confirm-delete-modal.component';
 import {CategoryService, Color, Print, ProductType} from '../../core/services/category.service';
 import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
+import {DatePipe, NgForOf, NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import {MonthlyEvent} from '../../core/models/category-models';
 
 
-type CategoryItem = Color | ProductType | Print;
+type CategoryItem = Color | ProductType | Print | MonthlyEvent;
 @Component({
   selector: 'app-add-category',
   templateUrl: './add-category.component.html',
@@ -16,7 +17,8 @@ type CategoryItem = Color | ProductType | Print;
     ConfirmDeleteModalComponent,
     FormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    DatePipe
   ],
   styleUrls: ['./add-category.component.scss']
 })
@@ -25,7 +27,29 @@ export class AddCategoryComponent {
   selectedItems: CategoryItem[] = [];
   newItem: string = '';
   itemToDelete: string | null = null;
+  newProductType: Omit<ProductType, 'id'> = {
+    productTypeName: '',
+    material: '',
+    fitDetails: '',
+    care: '',
+    modelInfo: ''
+
+  };
+  monthlyEvents: MonthlyEvent[] = [];
+  newMonthlyEvent: { name: string; creationDate: string; endDate: string } = {
+    name: '',
+    creationDate: '',
+    endDate: ''
+  }
+
+
+
+  splitBySemicolon(text: string): string[] {
+    return text.split(';').map(s => s.trim()).filter(s => s.length > 0);
+  }
+
   isDeleteModalVisible: boolean = false;
+
   isColor(item: CategoryItem): item is Color {
     return (item as Color).colorName !== undefined;
   }
@@ -34,10 +58,14 @@ export class AddCategoryComponent {
     return (item as ProductType).productTypeName !== undefined;
   }
 
+
   isPrint(item: CategoryItem): item is Print {
     return (item as Print).printName !== undefined;
   }
 
+  isMonthlyEvent(item: CategoryItem): item is MonthlyEvent {
+    return (item as MonthlyEvent).name !== undefined;
+  }
 
 
   colors: Color[] = [];
@@ -69,8 +97,14 @@ export class AddCategoryComponent {
         this.updateSelectedItems('print');
       }
     });
+    this.categoryService.getMonthlyEvents().subscribe(events => {
+      this.monthlyEvents = events;
+      console.log(events);
+      if (this.selectedCategory === 'monthlyEvent') {
+        this.updateSelectedItems('monthlyEvent');
+      }
+    });
   }
-
 
   showCategory(category: string) {
     this.selectedCategory = category;
@@ -84,9 +118,10 @@ export class AddCategoryComponent {
       this.selectedItems = this.productTypes;
     } else if (category === 'print') {
       this.selectedItems = this.prints;
+    } else if (category === 'monthlyEvent') {
+      this.selectedItems = this.monthlyEvents;
     }
   }
-
 
 
   openConfirmDialog(itemType: string) {
@@ -108,8 +143,9 @@ export class AddCategoryComponent {
       console.error('No token found!');
       return;
     }
-    console.log(token);
-    if (this.newItem.trim()) {
+
+    if (itemType.trim()) {
+
       if (itemType === 'color') {
         this.categoryService.addColor(this.newItem).subscribe(color => {
           this.colors.push(color);
@@ -117,11 +153,21 @@ export class AddCategoryComponent {
           this.newItem = '';
         });
       } else if (itemType === 'type') {
-        this.categoryService.addProductType(this.newItem).subscribe(type => {
+
+        console.log('Clearing form fields', this.newProductType);
+        this.categoryService.addProductType(this.newProductType).subscribe(type => {
           this.productTypes.push(type);
           this.loadCategories();
-          this.newItem = '';
+          console.log('Clearing form fields', this.newProductType);
+          this.newProductType = {
+            productTypeName: '',
+            material: '',
+            fitDetails: '',
+            care: '',
+            modelInfo: ''
+          };
         });
+
       } else if (itemType === 'print') {
         this.categoryService.addPrint(this.newItem).subscribe(print => {
           this.prints.push(print);
@@ -129,14 +175,29 @@ export class AddCategoryComponent {
           this.newItem = '';
         });
       }
+      if (itemType === 'monthlyEvent') {
+        if (!this.newMonthlyEvent.name || !this.newMonthlyEvent.creationDate || !this.newMonthlyEvent.endDate) {
+          alert('Всі поля мають бути заповнені!');
+          return;
+        }
+
+        this.categoryService.addMonthlyEvent(this.newMonthlyEvent).subscribe(event => {
+          this.monthlyEvents.push(event);
+          this.loadCategories();
+          this.newMonthlyEvent = { name: '', creationDate: '', endDate: '' };
+        });
+      }
     } else {
+      console.log(itemType)
       alert('Поле не може бути порожнім');
     }
   }
 
 
+
   openDeleteModal(id: string) {
     this.itemToDelete = id;
+    console.log(this.itemToDelete);
     this.isDeleteModalVisible = true;
   }
 
@@ -152,6 +213,11 @@ export class AddCategoryComponent {
         });
       } else if (this.selectedCategory === 'print') {
         this.categoryService.deletePrint(this.itemToDelete).subscribe(() => {
+          this.loadCategories();
+        });
+      }
+      if (this.selectedCategory === 'monthlyEvent') {
+        this.categoryService.deleteMonthlyEvent(this.itemToDelete).subscribe(() => {
           this.loadCategories();
         });
       }

@@ -98,7 +98,7 @@
           <div class="submenu-container ">
             <div
               class="submenu-toggle"
-              (click)="goToCategory('чоловічий одяг'); toggleSubmenu('men')">
+              (click)="goToCategory('men', 'all'); toggleSubmenu('men')">
               Чоловічий одяг
             </div>
             <div class="submenu-arrow-container" (click)="toggleSubmenu('men')">
@@ -112,21 +112,19 @@
             </div>
           </div>
 
-
           <ul *ngIf="activeSubmenu === 'men'" class="submenu">
-            <li><a routerLink="/products/men/hoodie" (click)="closeSidebar()">Худі</a></li>
-            <li><a routerLink="/products/men/tshirt" (click)="closeSidebar()">Футболки</a></li>
-            <li><a routerLink="/products/men/pants" (click)="closeSidebar()">Штани</a></li>
-            <li><a routerLink="/products/men/shorts" (click)="closeSidebar()">Шорти</a></li>
-
+            <li><a (click)="goToCategory('men', 'Худі'); closeSidebar()">Худі</a></li>
+            <li><a (click)="goToCategory('men', 'Лонгслів'); closeSidebar()">Футболки</a></li>
+            <li><a (click)="goToCategory('men', 'pants'); closeSidebar()">Штани</a></li>
+            <li><a (click)="goToCategory('men', 'shorts'); closeSidebar()">Шорти</a></li>
           </ul>
         </li>
 
-        <li class="has-submenu">
+    <li class="has-submenu">
           <div class="submenu-container">
             <div
               class="submenu-toggle"
-              (click)="goToCategory('жіночий одяг'); toggleSubmenu('women')">
+              (click)="goToCategory('women', 'all'); toggleSubmenu('women')">
               Жіночий одяг
             </div>
             <div class="submenu-arrow-container" (click)="toggleSubmenu('women')">
@@ -140,17 +138,17 @@
             </div>
           </div>
 
-
-        <ul *ngIf="isSubmenuOpen('women')" class="submenu">
-            <li><a routerLink="/products/women/hoodie "(click)="closeSidebar()" >Худі</a></li>
-            <li><a routerLink="/products/women/tshirt"(click)="closeSidebar()">Футболки</a></li>
-            <li><a routerLink="/products/women/pants"(click)="closeSidebar()">Штани</a></li>
-            <li><a routerLink="/products/women/shorts"(click)="closeSidebar()">Шорти</a></li>
+          <ul *ngIf="isSubmenuOpen('women')" class="submenu">
+            <li><a (click)="goToCategory('women', 'hoodie'); closeSidebar()">Худі</a></li>
+            <li><a (click)="goToCategory('women', 'Лонгслів'); closeSidebar()">Футболки</a></li>
+            <li><a (click)="goToCategory('women', 'pants'); closeSidebar()">Штани</a></li>
+            <li><a (click)="goToCategory('women', 'shorts'); closeSidebar()">Шорти</a></li>
           </ul>
         </li>
 
 
-        <li><a routerLink="product-category/monthly-event" (click)="closeSidebar()">Тренд місяця</a></li>
+
+        <li><a  (click)="goToCategory('unisex', 'monthly-event')">Тренд місяця</a></li>
 
 
       </ng-container>

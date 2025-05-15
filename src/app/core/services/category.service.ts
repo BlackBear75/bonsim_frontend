@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { catchError, map } from 'rxjs/operators';
 import { NotificationService } from './notification.service';
-import { Color, ProductType, Print } from '../models/category-models';
+import {Color, ProductType, Print, MonthlyEvent} from '../models/category-models';
 import { ServerResponse } from '../models/server-response.model';
 import {ErrorHandlerService} from './error-handler.service';
 
@@ -45,12 +45,13 @@ export class CategoryService {
     );
   }
 
-  addProductType(name: string): Observable<ProductType> {
-    return this.http.post<ServerResponse<ProductType>>(`${this.baseUrl}/product-types`, { name }).pipe(
+  addProductType(productType: Omit<ProductType, 'id'>): Observable<ProductType> {
+    return this.http.post<ServerResponse<ProductType>>(`${this.baseUrl}/product-types`, productType).pipe(
       map(res => res.data),
       catchError(error => this.errorHandler.handleError(error))
     );
   }
+
 
   deleteProductType(id: string): Observable<boolean> {
     return this.http.delete<ServerResponse<boolean>>(`${this.baseUrl}/product-types/${id}`).pipe(
@@ -79,4 +80,27 @@ export class CategoryService {
       catchError(error => this.errorHandler.handleError(error))
     );
   }
+
+  getMonthlyEvents(): Observable<MonthlyEvent[]> {
+    return this.http.get<ServerResponse<MonthlyEvent[]>>(`${this.baseUrl}/monthly-events`).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
+    );
+  }
+
+  addMonthlyEvent(event: Omit<MonthlyEvent, 'id'>): Observable<MonthlyEvent> {
+    return this.http.post<ServerResponse<MonthlyEvent>>(`${this.baseUrl}/monthly-events`, event).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
+    );
+  }
+
+  deleteMonthlyEvent(id: string): Observable<boolean> {
+    return this.http.delete<ServerResponse<boolean>>(`${this.baseUrl}/monthly-events/${id}`).pipe(
+      map(res => res.data),
+      catchError(error => this.errorHandler.handleError(error))
+    );
+  }
+
 }
+

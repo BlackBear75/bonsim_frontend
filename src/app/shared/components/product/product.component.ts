@@ -1,28 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {ActivatedRoute, RouterLink, RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {ProductCardComponent} from '../product-card/product-card.component';
-
-
-
-
-interface Product {
-  name: string;
-  price: number;
-  description: string;
-  imageUrl: string;
-  category: string;
-  availableSizes: string[];
-  availableColors: string[];
-  images: string[];
-  colorVariants?: Product[];
-  material?: string;
-  detailsAndCut?: string;
-  care?: string;
-  onModel?: string;
-  modelHeight?: string;
-  modelSize?: string;
-}
+import {ProductService} from '../../../core/services/product.service';
+import {Product} from '../../../core/models/product.model';
 
 
 @Component({
@@ -30,8 +11,8 @@ interface Product {
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     ProductCardComponent,
+    RouterLink,
   ],
 
   templateUrl: './product.component.html',
@@ -47,6 +28,35 @@ export class ProductComponent implements OnInit {
   startIndex = 0;
   visibleCount = 4;
   thumbnailHeight = 160 + 10;
+  colorVariants: any[] = [];
+  productId!: string;
+  private sizePriceOffsets: { [size: string]: number } = {
+    '2XS': -100,
+    'XS': -80,
+    'S': -50,
+    'M': -30,
+    'L': 0,     // базова ціна
+    'XL': 50,
+    '2XL': 100,
+    '3XL': 130,
+    '4XL': 150,
+  };
+  currentPrice: number = 0;
+  constructor(private route: ActivatedRoute, private productService: ProductService ) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.productId = params.get('id')!;
+      console.log('Loaded product id:', this.productId);
+       this.loadProduct(this.productId);
+    });
+  }
+  getLines(text?: string): string[] {
+    return text ? text.split(';').map(line => line.trim()).filter(line => line.length > 0) : [];
+  }
+
+
+
 
   getTranslateY(): string {
     return `translateY(-${this.startIndex * this.thumbnailHeight}px)`;
@@ -75,7 +85,7 @@ export class ProductComponent implements OnInit {
   currentIndex = 0;
 
   get itemsCount(): number {
-    return this.product?.colorVariants?.length || 0;
+    return this.product?.images?.length || 0;
   }
   scrollToIndex(index: number) {
     const container = this.carousel.nativeElement;
@@ -115,118 +125,37 @@ export class ProductComponent implements OnInit {
     }
   }
 
-  selectSize(size: string): void {
+  selectSize(size: string) {
     this.selectedSize = size;
-  }
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    const productId = this.route.snapshot.paramMap.get('id');
-    this.loadProduct(productId);
+    this.updatePrice();
   }
 
+  updatePrice() {
+    if (this.product) {
+      const basePrice = this.product.price; // ціна для L
+      const offset = this.sizePriceOffsets[this.selectedSize] ?? 0;
+      this.currentPrice = basePrice + offset;
+    }
+  }
   loadProduct(productId: string | null): void {
-    this.product = {
-      name: 'Лонгслів чорний',
-      price: 800,
-      description: 'Комфортний лонгслів чорного кольору, ідеальний для будь-якої погоди.',
-      imageUrl: '/assets/img/shop_05.jpg',
-      category: 'лонгсліви',
-      availableSizes: ['S', 'M', 'L', 'XL'],
-      availableColors: ['Чорний', 'Білий'],
-      images: [
-        '/assets/img/shop_05.jpg',
-        '/assets/img/shop_02.jpg',
-        '/assets/img/shop_03.jpg',
-        '/assets/img/shop_04.jpg',
-        '/assets/img/shop_01.jpg',
-        '/assets/img/shop_03.jpg',
-      ],
-      colorVariants: [
-        {
-          name: 'Лонгслів білий',
-          price: 800,
-          description: 'Комфортний лонгслів білого кольору.',
-          imageUrl: '/assets/img/banner_img_01.jpg',
-          category: 'лонгсліви',
-          availableSizes: ['S', 'M', 'L', 'XL'],
-          availableColors: ['Чорний', 'Білий'],
-          images: [
-            '/assets/img/banner_img_01.jpg',
-            '/assets/img/banner_img_01.jpg',
-            '/assets/img/banner_img_01.jpg'
-          ]
-        },
-        {
-          name: 'Лонгслів синій',
-          price: 850,
-          description: 'Комфортний лонгслів синього кольору.',
-          imageUrl: '/assets/img/banner_img_01.jpg',
-          category: 'лонгсліви',
-          availableSizes: ['S', 'M', 'L', 'XL'],
-          availableColors: ['Чорний', 'Синій'],
-          images: [
-            '/assets/img/banner_img_01.jpg',
-            '/assets/img/banner_img_01.jpg',
-            '/assets/img/banner_img_01.jpg'
-          ]
-        },
+    if (!productId) return;
 
-        {
-          name: 'Лонгслів синій',
-          price: 850,
-          description: 'Комфортний лонгслів синього кольору.',
-          imageUrl: '/assets/img/banner_img_01.jpg',
-          category: 'лонгсліви',
-          availableSizes: ['S', 'M', 'L', 'XL'],
-          availableColors: ['Чорний', 'Синій'],
-          images: [
-            '/assets/img/banner_img_01.jpg',
-            '/assets/img/banner_img_01.jpg',
-            '/assets/img/banner_img_01.jpg'
-          ]
-        },
-        {
-          name: 'Лонгслів синій',
-          price: 850,
-          description: 'Комфортний лонгслів синього кольору.',
-          imageUrl: '/assets/img/banner_img_01.jpg',
-          category: 'лонгсліви',
-          availableSizes: ['S', 'M', 'L', 'XL'],
-          availableColors: ['Чорний', 'Синій'],
-          images: [
-            '/assets/img/banner_img_01.jpg',
-            '/assets/img/banner_img_01.jpg',
-            '/assets/img/banner_img_01.jpg'
-          ]
-        },
-        {
-          name: 'Лонгслів синій',
-          price: 850,
-          description: 'Комфортний лонгслів синього кольору.',
-          imageUrl: '/assets/img/banner_img_01.jpg',
-          category: 'лонгсліви',
-          availableSizes: ['S', 'M', 'L', 'XL'],
-          availableColors: ['Чорний', 'Синій'],
-          images: [
-            '/assets/img/banner_img_01.jpg',
-            '/assets/img/banner_img_01.jpg',
-            '/assets/img/banner_img_01.jpg'
-          ]
-        }
-      ],
-      material: '– стрейч кулір преміум якості\n– 95% бавовна, 5% поліестер',
-      detailsAndCut: '– Посадка стандарт;\n– Обстрочена горловина, плечі;\n– Кіперна лента щоб не розтягувалася горловина;',
-      care: '– прання у звичайному режимі при температурі не вище 30°C, без віджиму;\n– відбілювання заборонено;\n– сушити в підвішеному стані, без застосування штучної сушки.',
-      onModel: '– зріст моделі – 180 см;\n– розмір на моделі – “L”.',
-      modelHeight: '180 см',
-      modelSize: 'L'
+    this.productService.getProductById(productId).subscribe({
+      next: (product: Product) => {
+        this.product = product;
+        this.selectedImage = product.images[0];
 
-    };
-
-    // Вибір першої картинки для основного зображення
-    this.selectedImage = this.product.images[0];
+        this.productService.getColorVariants(product.id).subscribe({
+          next: (variants) => {
+            this.colorVariants = variants;
+          }
+        });
+        this.selectedSize = 'L';
+        this.updatePrice();
+      }
+    });
   }
+
 
 
   setMainImage(img: string): void {

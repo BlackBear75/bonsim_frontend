@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { HostListener } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { Subscription } from 'rxjs';
+import {ProductType} from '../../../core/models/category-models';
+import {CategoryService} from '../../../core/services/category.service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,21 +24,23 @@ export class NavbarComponent {
   isNavbarSticky = false;
   isCartOpen = false;
   isSidebarOpen = false;
-  activeTab: 'categories' | 'info' | 'admin' = 'categories';  // Додали вкладку для адмін панелі
+  activeTab: 'categories' | 'info' | 'admin' = 'categories';
   activeSubmenu: 'men' | 'women' | null = null;
-
+  productTypes: ProductType[] = [];
   isAuthenticated = false;
   userRole: string | null = null;
 
   private authSub!: Subscription;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService,private categoryService: CategoryService){}
 
   ngOnInit(): void {
     this.authSub = this.authService.authStatus$.subscribe((status) => {
       this.isAuthenticated = status;
-      console.log(status);
       this.userRole = this.authService.getUserRole();
+      this.categoryService.getProductTypes().subscribe(types => {
+        this.productTypes = types;
+      });
     });
   }
 
@@ -77,9 +81,10 @@ export class NavbarComponent {
     this.toggleCart();
   }
 
-  goToCategory(categoryName: string) {
-    this.router.navigate(['/product-category', categoryName]);
+  goToCategory(gender: string, productType: string) {
+    this.router.navigate(['/product-category', gender, productType]);
   }
+
   toggleCart() {
     this.isCartOpen = !this.isCartOpen;
   }

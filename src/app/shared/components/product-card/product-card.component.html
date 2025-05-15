@@ -1,5 +1,5 @@
-<div class="category-card">
-  <div class="category-image" [ngStyle]="{ 'background-image': 'url(' + product.imageUrl + ')' }"></div>
+<div class="category-card" (click)="goToProduct(product.id)">
+  <div class="category-image" [ngStyle]="{ 'background-image': 'url(' + product.images[0] + ')' }"></div>
   <h3>{{ product.name }}</h3>
-  <p class="price">{{ product.price | currency }}</p>
+  <p class="price">{{ product.price | number:'1.0-0' }} UAH</p>
 </div>
