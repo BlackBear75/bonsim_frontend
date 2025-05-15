@@ -23,7 +23,7 @@ export class AddProductComponent implements OnInit {
   imageError: string = '';
   genders: string[] = ['Men', 'Women', 'Unisex'];
   monthlyEvents: MonthlyEvent[] = [];
-
+  filteredGenders: string[] = [];
   productTypes: ProductType[] = [];
   colors: Color[] = [];
   prints: Print[] = [];
@@ -45,6 +45,15 @@ export class AddProductComponent implements OnInit {
     this.categoryService.getColors().subscribe(colors => this.colors = colors);
     this.categoryService.getPrints().subscribe(prints => this.prints = prints);
     this.categoryService.getMonthlyEvents().subscribe(events => this.monthlyEvents = events);
+
+    this.productForm.get('type')?.valueChanges.subscribe((selectedType: ProductType) => {
+      if (selectedType?.gender) {
+        this.filteredGenders = [selectedType.gender];
+        this.productForm.get('gender')?.setValue(selectedType.gender);
+      } else {
+        this.filteredGenders = this.genders;
+      }
+    });
   }
 
   onFileChange(event: any) {

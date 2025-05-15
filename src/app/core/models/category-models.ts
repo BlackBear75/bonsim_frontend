@@ -7,6 +7,7 @@ export interface ProductType {
   fitDetails?: string;
   care?: string;
   modelInfo?: string;
+  gender: 'Men' | 'Women' | 'Unisex';
 }
 
 export interface MonthlyEvent {

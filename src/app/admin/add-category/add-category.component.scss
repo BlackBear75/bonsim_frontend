@@ -126,20 +126,29 @@
   }
 
   input[type="text"],
-  textarea {
+  textarea,
+  select {
     padding: 8px 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
     font-size: 15px;
-    resize: vertical;
-    min-height: 40px;
     font-family: inherit;
     background-color: #fdfdfd;
   }
 
   textarea {
+    resize: vertical;
     min-height: 80px;
     white-space: pre-line;
   }
 
+  select {
+    min-height: 20px;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%204%205%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M2%205L0%200h4L2%205z%22/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 10px;
+  }
 }
+

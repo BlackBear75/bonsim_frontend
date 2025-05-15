@@ -16,12 +16,17 @@
 
       <ul>
         <li *ngFor="let item of selectedItems" class="category-item">
-          <!-- Колір -->
           <span *ngIf="isColor(item)">{{ item.colorName }}</span>
 
           <!-- Вид товару -->
           <div *ngIf="isProductType(item)" class="product-type-details">
             <strong>{{ item.productTypeName }}</strong>
+            <div *ngIf="item.gender">
+              <strong>Гендер:</strong>
+              <ul>
+                <li *ngFor="let line of splitBySemicolon(item.gender)">{{ line }}</li>
+              </ul>
+            </div>
             <div *ngIf="item.material">
               <strong>Матеріал:</strong>
               <ul>
@@ -48,10 +53,8 @@
             </div>
           </div>
 
-          <!-- Принт -->
           <span *ngIf="isPrint(item)">{{ item.printName }}</span>
 
-          <!-- Івент місяця -->
           <div *ngIf="isMonthlyEvent(item)">
             <strong>{{ item.name }}</strong><br/>
             <small>Початок: {{ item.creationDate | date:'dd.MM.yyyy' }}</small><br/>
@@ -76,6 +79,13 @@
     <div *ngIf="selectedCategory === 'type'" class="product-type-form">
       <label for="newType">Назва виду товару</label>
       <input type="text" id="newType" [(ngModel)]="newProductType.productTypeName" placeholder="Введіть назву виду товару" />
+      <label for="gender">Гендер</label>
+      <select id="gender" [(ngModel)]="newProductType.gender">
+        <option value="Men">Чоловічий</option>
+        <option value="Women">Жіночий</option>
+        <option value="Unisex">Унісекс</option>
+      </select>
+
       <label>Матеріал</label>
       <textarea [(ngModel)]="newProductType.material" placeholder="– Льон преміум якості&#10;– 70% льон, 30% поліестер"></textarea>
       <label>Деталі та крій</label>

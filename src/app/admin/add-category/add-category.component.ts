@@ -32,9 +32,10 @@ export class AddCategoryComponent {
     material: '',
     fitDetails: '',
     care: '',
-    modelInfo: ''
-
+    modelInfo: '',
+    gender: 'Unisex'
   };
+
   monthlyEvents: MonthlyEvent[] = [];
   newMonthlyEvent: { name: string; creationDate: string; endDate: string } = {
     name: '',
@@ -154,17 +155,16 @@ export class AddCategoryComponent {
         });
       } else if (itemType === 'type') {
 
-        console.log('Clearing form fields', this.newProductType);
         this.categoryService.addProductType(this.newProductType).subscribe(type => {
           this.productTypes.push(type);
           this.loadCategories();
-          console.log('Clearing form fields', this.newProductType);
           this.newProductType = {
             productTypeName: '',
             material: '',
             fitDetails: '',
             care: '',
-            modelInfo: ''
+            modelInfo: '',
+            gender: "Unisex"
           };
         });
 
