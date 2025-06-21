@@ -18,7 +18,6 @@
       <img src="assets/img/magnifier.png" alt="Magnifying" class="magnifying-glass-icon" />
     </div>
 
-
     <div class="icon bag-icon" (click)="toggleCart()">
       <img src="assets/img/bag.png" alt="Bag" class="bag-icon" />
       <span class="bag-badge">{{ cartItemCount }}</span>
@@ -42,27 +41,7 @@
     </div>
   </div>
 
-  <div class="cart-sidebar-backdrop" *ngIf="isCartOpen" (click)="toggleCart()"></div>
-  <aside class="cart-sidebar" [class.open]="isCartOpen">
-    <div class="cart-sidebar-header">
-      <h2>Кошик</h2>
-      <button class="close-button" (click)="toggleCart()">×</button>
-    </div>
-
-    <div class="cart-sidebar-content">
-      <ng-container *ngIf="cartItemCount > 0; else emptyCart">
-        <p>Тут товари кошика (пізніше).</p>
-      </ng-container>
-
-      <ng-template #emptyCart>
-        <div class="empty-cart">
-          <p>Ваш кошик порожній.</p>
-          <button class="return-to-shop" (click)="goToShop()">Повернутись до магазину</button>
-        </div>
-      </ng-template>
-    </div>
-  </aside>
-
+<app-cart-sidebar></app-cart-sidebar>
 
 
 
@@ -112,11 +91,12 @@
             </div>
           </div>
 
-          <ul *ngIf="activeSubmenu === 'men'" class="submenu">
-            <li><a (click)="goToCategory('men', 'Худі'); closeSidebar()">Худі</a></li>
-            <li><a (click)="goToCategory('men', 'Лонгслів'); closeSidebar()">Футболки</a></li>
-            <li><a (click)="goToCategory('men', 'pants'); closeSidebar()">Штани</a></li>
-            <li><a (click)="goToCategory('men', 'shorts'); closeSidebar()">Шорти</a></li>
+          <ul class="submenu" *ngIf="isSubmenuOpen('men')">
+            <li *ngFor="let type of menProductTypes">
+              <a (click)="goToCategory('men', type.productTypeName); closeSidebar()">
+                {{ type.productTypeName }}
+              </a>
+            </li>
           </ul>
         </li>
 
@@ -138,13 +118,15 @@
             </div>
           </div>
 
-          <ul *ngIf="isSubmenuOpen('women')" class="submenu">
-            <li><a (click)="goToCategory('women', 'hoodie'); closeSidebar()">Худі</a></li>
-            <li><a (click)="goToCategory('women', 'Лонгслів'); closeSidebar()">Футболки</a></li>
-            <li><a (click)="goToCategory('women', 'pants'); closeSidebar()">Штани</a></li>
-            <li><a (click)="goToCategory('women', 'shorts'); closeSidebar()">Шорти</a></li>
-          </ul>
+      <ul class="submenu" *ngIf="isSubmenuOpen('women')">
+        <li *ngFor="let type of womenProductTypes">
+          <a (click)="goToCategory('women', type.productTypeName); closeSidebar()">
+            {{ type.productTypeName }}
+          </a>
         </li>
+      </ul>
+
+    </li>
 
 
 

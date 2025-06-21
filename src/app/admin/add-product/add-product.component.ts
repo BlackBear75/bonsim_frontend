@@ -33,7 +33,6 @@ export class AddProductComponent implements OnInit {
       type: ['', Validators.required],
       color: ['', Validators.required],
       print: ['', Validators.required],
-      gender: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(0.01)]],
       monthlyEvent: [null]
     });
@@ -87,7 +86,6 @@ export class AddProductComponent implements OnInit {
       formData.append('typeId', type.id);
       formData.append('colorId', color.id);
       formData.append('printId', print.id);
-      formData.append('gender', gender);
       formData.append('price', price.toString());
       if (monthlyEvent) {
         formData.append('monthlyEventId', monthlyEvent.id);

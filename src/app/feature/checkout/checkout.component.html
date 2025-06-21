@@ -1,68 +1,118 @@
 <div class="checkout-container">
-  <!-- Права частина: Список замовлених товарів -->
   <div class="order-list">
     <h3>Ваше замовлення</h3>
     <ul>
-      <li *ngFor="let item of cartItems">
-        {{ item.name }} — {{ item.quantity }} x {{ item.price }} грн
+      <li *ngFor="let item of cartItems" (click)="goToProduct(item.product.id)" class="order-item">
+        <img
+          *ngIf="item.product.images && item.product.images.length > 0"
+          [src]="item.product.images[0]"
+          alt="{{ item.product.name }}"
+          class="product-image"
+        />
+        <div class="item-info">
+          <div>
+            {{ item.product.name }} (розмір: {{ item.size }})
+          </div>
+          <div>
+            {{ item.quantity }} x {{ item.price }} грн
+          </div>
+          <button
+            class="remove-button"
+            (click)="removeItem(item.product.id, item.size); $event.stopPropagation()"
+          >
+            Вилучити
+          </button>
+        </div>
       </li>
     </ul>
+
     <p><strong>До сплати:</strong> {{ totalAmount }} грн</p>
   </div>
 
-  <!-- Ліва частина: Форма оформлення замовлення -->
   <div class="checkout-form">
     <h2>Оформлення замовлення</h2>
 
     <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
-      <!-- 📌 Клієнтські дані -->
-      <section>
-        <h3>Ваші дані</h3>
-        <label class="required">Прізвище</label>
-        <input formControlName="lastName" placeholder="Прізвище" />
+      <label class="required">Прізвище</label>
+      <input
+        formControlName="lastName"
+        placeholder="Прізвище"
+        [class.invalid-field]="checkoutForm.get('lastName')?.invalid && checkoutForm.get('lastName')?.touched"
+      />
+      <div class="error" *ngIf="checkoutForm.get('lastName')?.invalid && checkoutForm.get('lastName')?.touched">
+        Поле обов’язкове
+      </div>
 
-        <label class="required">Ім’я</label>
-        <input formControlName="firstName" placeholder="Ім’я" />
+      <label class="required">Ім’я</label>
+      <input
+        formControlName="firstName"
+        placeholder="Ім’я"
+        [class.invalid-field]="checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched"
+      />
+      <div class="error" *ngIf="checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched">
+        Поле обов’язкове
+      </div>
 
-        <label>По батькові (необов'язково)</label>
-        <input formControlName="middleName" placeholder="По батькові (необов'язково)" />
+      <label>По батькові (необов'язково)</label>
+      <input formControlName="middleName" placeholder="По батькові (необов'язково)" />
 
-        <label class="required">Email</label>
-        <input formControlName="email" placeholder="Email" type="email" />
+      <label class="required">Email</label>
+      <input
+        formControlName="email"
+        placeholder="Email"
+        type="email"
+        [class.invalid-field]="checkoutForm.get('email')?.invalid && checkoutForm.get('email')?.touched"
+      />
+      <div class="error" *ngIf="checkoutForm.get('email')?.touched && checkoutForm.get('email')?.errors">
+        <span *ngIf="checkoutForm.get('email')?.errors?.['required']">Поле обов’язкове</span>
+        <span *ngIf="checkoutForm.get('email')?.errors?.['email']">Невалідний email</span>
+      </div>
 
-        <label class="required">Телефон</label>
-        <input formControlName="phone" placeholder="Телефон" type="tel" />
-      </section>
+      <label class="required">Телефон</label>
+      <div class="phone-input-group">
+        <select formControlName="phoneCode">
+          <option value="+380">+380</option>
+        </select>
 
-      <!-- 📦 Доставка -->
+        <input
+          type="tel"
+          formControlName="phoneNumber"
+          placeholder="(___) ___ __ __"
+        />
+      </div>
+
+      <div class="error" *ngIf="checkoutForm.get('phoneNumber')?.touched && checkoutForm.get('phoneNumber')?.errors">
+        <span *ngIf="checkoutForm.get('phoneNumber')?.errors?.['required']">Поле обов’язкове</span>
+        <span *ngIf="checkoutForm.get('phoneNumber')?.errors?.['pattern']">Некоректний формат телефону</span>
+      </div>
+
       <section>
         <h3>Доставка</h3>
 
-        <!-- Пошук міста -->
         <label class="required">Місто або село</label>
         <input
           formControlName="city"
           placeholder="Місто або село"
+          autocomplete="off"
           (input)="onCityChange(checkoutForm.value.city)"
-          [attr.autocomplete]="'off'"
+          [class.invalid-field]="checkoutForm.get('city')?.invalid && checkoutForm.get('city')?.touched"
         />
-
-        <!-- Список міст -->
-        <ul *ngIf="cities.length > 0" class="dropdown">
-          <li *ngFor="let c of cities" (click)="checkoutForm.patchValue({ city: c.label }); getWarehouses(c.ref)">
+        <ul *ngIf="showCityDropdown" class="dropdown">
+          <li *ngFor="let c of cities" (click)="onCitySelect(c)">
             {{ c.label }}
           </li>
         </ul>
 
-        <!-- Відділення -->
         <label class="required">Оберіть відділення</label>
-        <select formControlName="warehouse">
-          <option value="" disabled selected>Оберіть відділення</option>
+        <select
+          formControlName="warehouse"
+          [class.invalid-field]="checkoutForm.get('warehouse')?.invalid && checkoutForm.get('warehouse')?.touched"
+        >
+          <option value="" disabled>Оберіть відділення</option>
           <option *ngFor="let w of warehouses" [value]="w.description">{{ w.description }}</option>
         </select>
       </section>
 
-      <!-- 💳 Оплата -->
       <section>
         <h3>Оплата</h3>
         <label>
@@ -75,10 +125,9 @@
         </label>
       </section>
 
-      <!-- 📤 Кнопка -->
-      <button type="submit" [disabled]="checkoutForm.invalid">
-        Підтвердити замовлення
-      </button>
+      <button type="submit">Підтвердити замовлення</button>
+
+
     </form>
   </div>
 </div>

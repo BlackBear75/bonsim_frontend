@@ -15,6 +15,30 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: 'Arial', sans-serif;
 }
+.phone-input-group {
+  display: flex;
+  gap: 8px;
+
+  select,
+  input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  select {
+    width: 100px;
+    background-color: #f5f5f5;
+    color: #888;
+    cursor: default;
+    pointer-events: none; // блокує взаємодію, якщо справді не активний
+  }
+
+  input {
+    flex: 1;
+  }
+}
 
 .order-list {
   width: 30%;
@@ -64,9 +88,10 @@ ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  max-height: 200px;
+  max-height: calc(6 * 80px); /* максимум 5 елементів по 80px */
   overflow-y: auto;
 }
+
 
 li {
   padding: 10px;
@@ -81,14 +106,16 @@ li:hover {
 button {
   width: 100%;
   padding: 12px;
-  background-color: #4CAF50;
+  background-color: #000000;
   color: white;
   border: none;
   border-radius: 5px;
   font-size: 1.1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ,transform 0.3s ease;
+
 }
+
 
 button:disabled {
   background-color: #ccc;
@@ -96,7 +123,7 @@ button:disabled {
 }
 
 button:hover {
-  background-color: #45a049;
+  transform: scale(1.05);
 }
 
 section {
@@ -115,4 +142,47 @@ section {
   font-size: 1.1rem;
   font-weight: bold;
   margin-top: 20px;
+}
+.order-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+
+  .product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+  }
+
+  .item-info {
+    flex: 1;
+
+    div {
+      margin-bottom: 5px;
+    }
+
+    .remove-button {
+      background-color: #e74c3c;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched {
+  border: 1px solid red;
 }

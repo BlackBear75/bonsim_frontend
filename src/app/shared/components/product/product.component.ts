@@ -4,6 +4,7 @@ import {CommonModule} from '@angular/common';
 import {ProductCardComponent} from '../product-card/product-card.component';
 import {ProductService} from '../../../core/services/product.service';
 import {Product} from '../../../core/models/product.model';
+import {CartService} from '../../../core/services/cart.service';
 
 
 @Component({
@@ -35,14 +36,14 @@ export class ProductComponent implements OnInit {
     'XS': -80,
     'S': -50,
     'M': -30,
-    'L': 0,     // базова ціна
+    'L': 0,
     'XL': 50,
     '2XL': 100,
     '3XL': 130,
     '4XL': 150,
   };
   currentPrice: number = 0;
-  constructor(private route: ActivatedRoute, private productService: ProductService ) {}
+  constructor(private route: ActivatedRoute, private productService: ProductService, private cartService: CartService,) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -161,5 +162,10 @@ export class ProductComponent implements OnInit {
   setMainImage(img: string): void {
     this.selectedImage = img;
   }
-  addToCart(): void {}
+  addToCart(): void {
+    if (this.product && this.selectedSize) {
+      this.cartService.addItem(this.product, this.selectedSize, this.currentPrice);
+    }
+  }
+
 }

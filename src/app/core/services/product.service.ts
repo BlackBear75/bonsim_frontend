@@ -34,6 +34,7 @@ export class ProductService {
       catchError(error => this.errorHandler.handleError(error))
     );
   }
+
   getProductsByCategory(gender?: string, productType?: string): Observable<any> {
     let params = new HttpParams();
     if (gender) params = params.set('gender', gender);

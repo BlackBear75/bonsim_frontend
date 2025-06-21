@@ -8,17 +8,20 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Subscription } from 'rxjs';
 import {ProductType} from '../../../core/models/category-models';
 import {CategoryService} from '../../../core/services/category.service';
+import {CartSidebarComponent} from '../cart-sidebar/cart-sidebar.component';
+import {Product} from '../../../core/models/product.model';
+import {CartService} from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   templateUrl: './navbar.component.html',
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, CartSidebarComponent],
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
   cartItemCount = 0;
-  cartTotalPrice = 1250;
+  cartTotalPrice = 0;
   isSearchOpen = false;
   searchText = '';
   isNavbarSticky = false;
@@ -29,10 +32,10 @@ export class NavbarComponent {
   productTypes: ProductType[] = [];
   isAuthenticated = false;
   userRole: string | null = null;
-
+  cartItems: Product[] = [];
   private authSub!: Subscription;
-
-  constructor(private router: Router, private authService: AuthService,private categoryService: CategoryService){}
+  private cartSub!: Subscription;
+  constructor(private router: Router, private authService: AuthService,private categoryService: CategoryService,private  cartService: CartService,){}
 
   ngOnInit(): void {
     this.authSub = this.authService.authStatus$.subscribe((status) => {
@@ -40,6 +43,12 @@ export class NavbarComponent {
       this.userRole = this.authService.getUserRole();
       this.categoryService.getProductTypes().subscribe(types => {
         this.productTypes = types;
+        console.log(this.productTypes);
+      });
+
+      this.cartSub = this.cartService.cartItems$.subscribe(items => {
+        this.cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+        this.cartTotalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
       });
     });
   }
@@ -50,11 +59,22 @@ export class NavbarComponent {
 
   ngOnDestroy(): void {
     this.authSub?.unsubscribe();
+    this.cartSub?.unsubscribe();
   }
 
   setTab(tab: 'categories' | 'info' | 'admin') {
     this.activeTab = tab;
     this.activeSubmenu = null;
+  }
+  hasGender(gender: string): boolean {
+    return this.productTypes.some(t => t.gender === gender);
+  }
+  get womenProductTypes() {
+    return this.productTypes.filter(type => type.gender === 'Women' || type.gender === 'Unisex');
+  }
+
+  get menProductTypes() {
+    return this.productTypes.filter(type => type.gender === 'Men' || type.gender === 'Unisex');
   }
 
   isSubmenuOpen(category: string): boolean {
@@ -86,7 +106,7 @@ export class NavbarComponent {
   }
 
   toggleCart() {
-    this.isCartOpen = !this.isCartOpen;
+    this.cartService.toggleCart();
   }
   toggleSubmenu(category: 'men' | 'women'): void {
     this.activeSubmenu = this.activeSubmenu === category ? null : category;

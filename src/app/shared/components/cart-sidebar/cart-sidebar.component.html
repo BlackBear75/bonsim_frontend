@@ -1,0 +1,81 @@
+<div class="cart-sidebar-backdrop" *ngIf="isOpen" (click)="toggleCart()"></div>
+
+<aside class="cart-sidebar" [class.open]="isOpen">
+  <div class="cart-sidebar-header">
+    <h2>Кошик</h2>
+    <button class="close-button" (click)="toggleCart()">×</button>
+  </div>
+
+  <div class="cart-sidebar-content">
+    <ng-container *ngIf="cartItems.length > 0; else emptyCart">
+      <div class="cart-item" *ngFor="let item of cartItems">
+        <img
+          *ngIf="item.product.images?.[0]; else noImage"
+          [src]="item.product.images[0]"
+          [alt]="item.product.name"
+          class="cart-item-image"
+        />
+        <ng-template #noImage>
+          <img
+            src="assets/img/brand_01.png"
+            alt="No image"
+            class="cart-item-image"
+          />
+        </ng-template>
+
+        <div class="cart-item-details">
+          <h3>{{ item.product.name }}</h3>
+          <p>Розмір: {{ item.size }}</p>
+          <p>Ціна: {{ item.price | currency: 'UAH' }}</p>
+
+          <div class="quantity-controls">
+            <button
+              (click)="updateQuantity(item.product.id, item.size, item.quantity - 1)"
+              [disabled]="item.quantity <= 1"
+            >
+              −
+            </button>
+            <input
+              type="number"
+              [value]="item.quantity"
+              (change)="onQuantityInputChange(item.product.id, item.size, $any($event.target).value)"
+              min="1"
+            />
+            <button
+              (click)="updateQuantity(item.product.id, item.size, item.quantity + 1)"
+            >
+              +
+            </button>
+          </div>
+
+          <button
+            class="remove-button"
+            (click)="removeItem(item.product.id, item.size)"
+          >
+            Видалити
+          </button>
+
+
+        </div>
+      </div>
+
+      <div class="cart-total">
+        <strong>Всього: {{ cartTotal | currency: 'UAH' }}</strong>
+      </div>
+
+      <button class="confirm-order" (click)="goToCheckout()" [disabled]="cartItems.length === 0">
+        Оформити замовлення
+      </button>
+
+    </ng-container>
+
+    <ng-template #emptyCart>
+      <div class="empty-cart">
+        <p>Ваш кошик порожній.</p>
+        <button class="return-to-shop" (click)="goToShop()">
+          Повернутись до магазину
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</aside>
